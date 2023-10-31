@@ -107,9 +107,9 @@ public class StationService{
         // Chequeo que este en la estacion
         if (stationScooterDTO.isPresent()) {
             if (stationScooterDTO.get().getStationId().equals(stationId)) {
-                // Lo elimino
-                stationScooterRepository.delete(new StationScooter(station, scooterId));
-                throw new IllegalArgumentException("okkk");
+                // Lo quito
+                Optional<StationScooter> stationScooter = stationScooterRepository.findById(stationScooterDTO.get().getId());
+                stationScooterRepository.delete(stationScooter.get());
             } else {
                 throw new IllegalArgumentException("El monopatin con Id " + scooterId + " se encuentra en otra estacion con Id: " + stationScooterDTO.get().getStationId());
             }
