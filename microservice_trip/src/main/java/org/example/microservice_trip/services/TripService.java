@@ -16,6 +16,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -43,48 +45,53 @@ public class TripService{
     }
 
     @Transactional
-    public TripDTO save(long idUsuario, long idScooter) {
-        ResponseEntity<UserDTO> user = restTemplate.getForEntity("http://localhost:8080/usuarios/buscar/" + idUsuario, UserDTO.class);
-        ResponseEntity<List<AccountDTO>> accounts = restTemplate.exchange("http://localhost:8080/cuentas/usuario/" + idUsuario,
+    public TripDTO save(long userId, long scooterId) {
+        ResponseEntity<UserDTO> user = restTemplate.getForEntity("http://localhost:8080/usuarios/" + userId, UserDTO.class);
+        if (user.getStatusCode() != HttpStatus.OK) {
+            throw new IllegalArgumentException("ID de usuario invalido: " + userId);
+        }
+
+        ResponseEntity<List<AccountDTO>> accounts = restTemplate.exchange("http://localhost:8080/cuentas/usuario/" + userId,
                 HttpMethod.GET, null, new ParameterizedTypeReference<List<AccountDTO>>() {});
         if (accounts.getStatusCode() != HttpStatus.OK) {
-            throw new IllegalArgumentException("Error al obtener las cuentas del usuario: " + idUsuario);
+            throw new IllegalArgumentException("Error al obtener las cuentas del usuario con id: " + userId);
         }
-        boolean hasCredit = false;
-        for(AccountDTO account : accounts.getBody()) {
-            if (account.getBalance() > 0)
-                hasCredit = true;
-        }
-        if (!hasCredit) {
-            throw new IllegalArgumentException("El usuario no tiene saldo suficiente para realizar un viaje");
-        }
-        ResponseEntity<ScooterDTO> scooter = restTemplate.getForEntity("http://localhost:8002/monopatines/" + idScooter, ScooterDTO.class);
-        if (user.getStatusCode() != HttpStatus.OK || scooter.getStatusCode() != HttpStatus.OK) {
-            throw new IllegalArgumentException("ID de usuario o scooter invalido: " + idUsuario + " " + idScooter);
-        }
-        TripDTO res = new TripDTO(this.tripRepository.save(new Trip(idUsuario, idScooter, 0, rateRepository.getCurrentFlatRate(), -scooter.getBody().getTiempoDeUso(), -scooter.getBody().getKilometros())));
-        UpdateScooterState(idScooter, scooter.getBody());
 
+        //Si el usuario no cuenta con saldo no se puede registrar el viaje
+        for(AccountDTO account : Objects.requireNonNull(accounts.getBody())) {
+            if (account.getBalance() <= 0) {
+                throw new IllegalArgumentException("El usuario no tiene saldo suficiente para realizar el viaje");
+            }
+        }
 
-        //ResponseEntity<?> scooterResponse = restTemplate.postForLocation("http://localhost:8002/scooters/actualizar", scooter.getBody());
-        return res;
+        ResponseEntity<ScooterDTO> scooter = restTemplate.getForEntity("http://localhost:8082/monopatines/" + scooterId, ScooterDTO.class);
+        if (scooter.getStatusCode() != HttpStatus.OK) {
+            throw new IllegalArgumentException("ID monopatin invalido: " + scooterId);
+        }
+
+        Trip trip = new Trip(userId, scooterId, Timestamp.from(Instant.now()), null,0, 0.0, 0, 0);
+        this.tripRepository.save(trip);
+
+        ResponseEntity<?> responseEntity = updateScooterState(scooterId, Objects.requireNonNull(scooter.getBody()));
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            throw new IllegalArgumentException("No se pudo cambiar el estado del monopatin a BUSY");
+        }
+
+        return new TripDTO(trip);
     }
 
-    private ScooterDTO UpdateScooterState(long idScooter, ScooterDTO scooter) {
-        String scooterUpdateUrl = "http://localhost:8002/monopatines/" + idScooter;
-        scooter.setStatus("Ocupado");
+    private ResponseEntity<?> updateScooterState(long scooterId, ScooterDTO scooter) {
+        scooter.setStatus("BUSY");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<ScooterDTO> requestEntity = new HttpEntity<>(scooter, headers);
 
-        ResponseEntity<ScooterDTO> scooterResponse = restTemplate.exchange(
-                scooterUpdateUrl,
+        return restTemplate.exchange("http://localhost:8082/monopatines/" + scooterId,
                 HttpMethod.PUT,
                 requestEntity,
                 ScooterDTO.class
         );
-        return scooterResponse.getBody();
     }
 
     @Transactional
@@ -98,15 +105,19 @@ public class TripService{
     }
 
     @Transactional
-    public void tripEnd(Long id) throws Exception {
+    public void endTrip(Long id, double kilometers) throws Exception {
         Trip trip = tripRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("ID de estacion invalido: " + id));
-        ResponseEntity<ScooterDTO> scooter = restTemplate.getForEntity("http://localhost:8002/scooters/buscar/" + trip.getScooterId(), ScooterDTO.class);
-        trip.setPauseTime(scooter.getBody().getPauseTime());
-        trip.setUseTime(scooter.getBody().getUseTime());
-        trip.setKilometers(scooter.getBody().getKilometers());
-        trip.setEndTime(new Timestamp(System.currentTimeMillis()));
-        //trip.setScooterEndKms(scooter.getBody().getKilometers());
+                () -> new IllegalArgumentException("No se encontro un viaje con id: " + id));
+
+        ResponseEntity<ScooterDTO> scooter = restTemplate.getForEntity("http://localhost:8082/monopatines/" + trip.getScooterId(), ScooterDTO.class);
+
+        trip.setKilometers(kilometers);
+        trip.setEndTime(Timestamp.from(Instant.now()));
+        trip.setUseTime((int) ChronoUnit.MINUTES.between(
+                trip.getStartTime().toInstant(),
+                trip.getEndTime().toInstant())
+        );
+
         if (trip.getPauseTime() == 0) {
             trip.setRate(scooter.getBody().getUseTime() * getCurrentFlatRate());//esto tiene que ser con el tiempo
         }
@@ -118,7 +129,6 @@ public class TripService{
         scooter.getBody().setStatus("Libre");
         updateUserAccount(trip.getUserId(), trip.getRate());
         URI scooterResponse = restTemplate.postForLocation("http://localhost:8002/scooters/actualizar", scooter.getBody());
-
     }
 
     @Transactional
@@ -179,16 +189,4 @@ public class TripService{
         trip.setEndTime(entity.getEndTime());
         tripRepository.save(trip);
     }
-	
-	
-	/*
-	@Transactional(readOnly = true)
-	public List<InformeTripDTO> informeTrips() {
-		return this.inscriptos.informeTrips();
-	}
-
-	@Transactional(readOnly = true)
-	public List<InformeTripCantEstudiantesDTO> tripsOrdenadas() {
-		return this.tripRepository.tripsOrdenadas();
-	} */
 }

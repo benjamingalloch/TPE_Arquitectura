@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 
 @Entity
 @Data
-@Table(name = "travel")
+@Table(name = "trip")
 public class Trip {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,43 +16,40 @@ public class Trip {
 
     @Column(name = "user_id")
     private long userId;
+
     @Column(name = "scooter_id")
     private long scooterId;
-    @Column(name = "use_time")
-    private Timestamp useTime;
+
+    @Column(name = "start_time")
+    private Timestamp startTime;
+
     @Column(name = "end_time")
     private Timestamp endTime;
+
+    @Column(name = "use_time")
+    private int useTime;
+
     @Column(name = "kilometers")
     private double kilometers;
-    // @Column(name = "scooter_end_kms")
-    // private double scooterEndKms;
+
     @Column(name = "pause_time")
     private int pauseTime;
-    @Column(name = "rate")
-    private Double rate;
+
+    @Column(name = "price")
+    private Double price;
 
     public Trip(){
         super();
     }
 
-    // public Travel(long userId, long scooterId, Double rate, double scooterStartKms) {
-    // 	this.userId = userId;
-    // 	this.scooterId = scooterId;
-    // 	this.startTime = new Timestamp(System.currentTimeMillis());
-    // 	this.endTime = null;
-    // 	this.scooterStartKms = scooterStartKms;
-    // 	this.scooterEndKms = 0;
-    // 	this.pause = Duration.ZERO;
-    // 	this.rate = rate;
-    // }
-
-    public Trip(long userId, long scooterId, int pauseTime, Double rate, Timestamp useTime, double scooterInitKms) {
+    public Trip(long userId, long scooterId, Timestamp startTime, Timestamp endTime, int pauseTime, Double price, int useTime, double kilometers) {
         this.userId = userId;
         this.scooterId = scooterId;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.useTime = useTime;
-        this.kilometers = scooterInitKms;
-        this.endTime = null;
-        this.pauseTime = 0;
-        this.rate = rate;
+        this.kilometers = kilometers;
+        this.pauseTime = pauseTime;
+        this.price = price;
     }
 }
