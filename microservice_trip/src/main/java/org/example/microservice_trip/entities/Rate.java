@@ -9,15 +9,18 @@ import java.util.Date;
 @Entity
 @Data
 @Table(name = "rate")
-
 public class Rate {
-    @Column(name = "rateId")
+    @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long rateId;
+    private long id;
+
     @Column(name = "date")
     private Timestamp date;
+
     @Column(name = "flatRate")
     private double flatRate;
+
     @Column(name = "fullRate")
     private double fullRate;
 

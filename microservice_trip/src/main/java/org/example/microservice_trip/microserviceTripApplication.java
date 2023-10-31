@@ -11,5 +11,4 @@ public class microserviceTripApplication {
         SpringApplication.run(microserviceTripApplication.class, args);
     }
 }
-}
 

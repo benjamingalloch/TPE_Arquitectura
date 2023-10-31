@@ -14,4 +14,3 @@ public interface RateRepository extends JpaRepository<Rate, Long> {
     @Query("SELECT value.fullRate FROM Rate WHERE id = (SELECT MAX(id) FROM Rate)")
     Double getCurrentFullRate();
 }
-}
