@@ -13,6 +13,7 @@ import java.security.Timestamp;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -22,8 +23,8 @@ import java.util.Set;
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="account_id")
-    private long accountId;
+    @Column(name="id")
+    private long id;
     @Column(name="register_date")
     private LocalDate registerDate;
     @Column(name = "available")
@@ -35,12 +36,14 @@ public class Account {
 
 
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
-    private Set<UserAccount> users;
+    @ManyToMany
+    @JoinTable(name = "user_account",  // Nombre de la tabla intermedia
+            joinColumns = @JoinColumn(name = "account_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<User> users;
 
     public Account() {
         super();
-        this.users = new HashSet<>();
     }
 
     public Account(boolean available, String idMPago, Double balance) {
@@ -49,11 +52,20 @@ public class Account {
         this.available = available;
         this.idMPago = idMPago;
         this.balance = balance;
-        this.users = new HashSet<>();
     }
 
     public Account(AccountDTO entity) {
         this.registerDate = LocalDate.now();
         this.available = entity.isAvailable();
+    }
+
+    public void addUser(User user) {
+        if (!this.users.contains(user)) {
+            this.users.add(user);
+        }
+    }
+
+    public void deleteUser(User user){
+        this.users.remove(user);
     }
 }

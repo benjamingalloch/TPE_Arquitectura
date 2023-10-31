@@ -3,9 +3,7 @@ package com.example.microservice_account.services;
 import com.example.microservice_account.DTOs.UserDTO;
 import com.example.microservice_account.entities.Account;
 import com.example.microservice_account.entities.User;
-import com.example.microservice_account.entities.UserAccount;
 import com.example.microservice_account.repositories.AccountRepository;
-import com.example.microservice_account.repositories.UserAccountRepository;
 import com.example.microservice_account.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +19,6 @@ public class UserService{
 
     @Autowired
     private AccountRepository accountRepository;
-
-    @Autowired
-    private UserAccountRepository userAccountRepository;
 
     @Transactional
     public List<UserDTO> findAll() {
@@ -60,8 +55,6 @@ public class UserService{
 
     @Transactional
     public void asociarCuenta(long userId, long accountId) {
-        Objects.requireNonNull(userId);
-        Objects.requireNonNull(accountId);
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("ID de usuario invalido: " + userId));
@@ -69,18 +62,12 @@ public class UserService{
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new IllegalArgumentException("ID de cuenta invalido: " + accountId));
 
-        if (userAccountRepository.findByUserAndAccount(user, account).isPresent()) {
-            throw new IllegalArgumentException("La cuenta ya se encuentra asociada al usuario");
-        }
-
-        UserAccount nuevo = new UserAccount(user, account);
-        userAccountRepository.save(nuevo);
+        user.addAccount(account);
+        userRepository.save(user);
     }
 
     @Transactional
     public void desvincularCuenta(long userId, long accountId) {
-        Objects.requireNonNull(userId);
-        Objects.requireNonNull(accountId);
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("ID de usuario invalido: " + userId));
@@ -88,18 +75,7 @@ public class UserService{
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new IllegalArgumentException("ID de cuenta invalido: " + accountId));
 
-
-        userAccountRepository.deleteByUserAndAccount(user, account);
+        user.deleteAccount(account);
     }
 
-	/*
-	@Transactional(readOnly = true)
-	public List<InformeUserDTO> informeUsers() {
-		return this.inscriptos.informeUsers();
-	}
-
-	@Transactional(readOnly = true)
-	public List<InformeUserCantEstudiantesDTO> usersOrdenadas() {
-		return this.userRepository.usersOrdenadas();
-	} */
 }

@@ -3,7 +3,6 @@ package com.example.microservice_account.controllers;
 import com.example.microservice_account.DTOs.AccountDTO;
 import com.example.microservice_account.services.AccountService;
 
-import com.example.microservice_account.services.UserAccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,8 +17,6 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
-    @Autowired
-    private UserAccountService userAccountService;
 
     @Operation(summary = "Obtiene todos las cuentas.", description = "Obtiene todas las cuentas")
     @GetMapping("")
@@ -31,14 +28,14 @@ public class AccountController {
         }
     }
 
-    @GetMapping("/accounts/users/{userId}")
-    public ResponseEntity<?> getCuentasByUserId(@PathVariable long userId){
-        try{
-            return ResponseEntity.status(HttpStatus.OK).body(userAccountService.getCuentasByUserId(userId));
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
-        }
-    }
+   //@GetMapping("/accounts/users/{userId}")
+    //public ResponseEntity<?> getCuentasByUserId(@PathVariable long userId){
+    //    try{
+    //        return ResponseEntity.status(HttpStatus.OK).body(userAccountService.getCuentasByUserId(userId));
+    //    }catch (Exception e){
+    //        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+    //    }
+    //}
 
     @Operation(summary = "Crea una nueva cuenta.", description = "Crea una cuenta")
     @PostMapping("/register")

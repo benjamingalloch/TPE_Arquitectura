@@ -3,9 +3,7 @@ package com.example.microservice_account.services;
 import com.example.microservice_account.DTOs.AccountDTO;
 import com.example.microservice_account.entities.Account;
 import com.example.microservice_account.entities.User;
-import com.example.microservice_account.entities.UserAccount;
 import com.example.microservice_account.repositories.AccountRepository;
-import com.example.microservice_account.repositories.UserAccountRepository;
 import com.example.microservice_account.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +20,6 @@ public class AccountService{
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private UserAccountRepository userAccountRepository;
 
     @Transactional
     public List<AccountDTO> getAll() {
@@ -59,8 +55,6 @@ public class AccountService{
 
     @Transactional
     public void linkUser(long userId, long accountId) {
-        Objects.requireNonNull(userId);
-        Objects.requireNonNull(accountId);
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("ID de usuario invalido: " + userId));
@@ -68,18 +62,13 @@ public class AccountService{
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new IllegalArgumentException("ID de cuenta invalido: " + accountId));
 
-        if (userAccountRepository.findByUserAndAccount(user, account).isPresent()) {
-            throw new IllegalArgumentException("La cuenta ya se encuentra asociada al usuario");
-        }
-
-        UserAccount newUser = new UserAccount(user, account);
-        userAccountRepository.save(newUser);
+        account.addUser(user);
+        accountRepository.save(account);
     }
 
     @Transactional
     public void unlinkUser(long userId, long accountId) {
-        Objects.requireNonNull(userId);
-        Objects.requireNonNull(accountId);
+
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("ID de usuario invalido: " + userId));
@@ -87,49 +76,39 @@ public class AccountService{
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new IllegalArgumentException("ID de cuenta invalido: " + accountId));
 
-        userAccountRepository.deleteByUserAndAccount(user, account);
+        account.deleteUser(user);
     }
 
     @Transactional
-    public void updateBalance(Double balance, long accountId) {
-        Account account = accountRepository.findById(accountId).orElseThrow(
-                () -> new IllegalArgumentException("ID de Cuenta invalido: " + accountId));
+    public void updateBalance(Double balance, long id) {
+        Account account = accountRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("ID de Cuenta invalido: " + id));
         account.setBalance(balance);
         accountRepository.save(account);
     }
 
     @Transactional
-    public Double getBalance(long accountId) {
-        Account account = accountRepository.findById(accountId).orElseThrow(
-                () -> new IllegalArgumentException("ID de Cuenta invalido: " + accountId));
-        return accountRepository.findById(account.getAccountId()).orElseThrow().getBalance();
+    public Double getBalance(long id) {
+        Account account = accountRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("ID de Cuenta invalido: " + id));
+        return accountRepository.findById(account.getId()).orElseThrow().getBalance();
     }
 
     @Transactional
-    public void suspendAccount(long accountId) {
-        Account account = accountRepository.findById(accountId).orElseThrow(
-                () -> new IllegalArgumentException("ID de Cuenta invalido: " + accountId));
+    public void suspendAccount(long id) {
+        Account account = accountRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("ID de Cuenta invalido: " + id));
         account.setAvailable(false);
         accountRepository.save(account);
     }
 
     @Transactional
-    public void activateAccount(long accountId) {
-        Account account = accountRepository.findById(accountId).orElseThrow(
-                () -> new IllegalArgumentException("ID de Cuenta invalido: " + accountId));
+    public void activateAccount(long id) {
+        Account account = accountRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("ID de Cuenta invalido: " + id));
         account.setAvailable(true);
         accountRepository.save(account);
     }
 
 
-	/*
-	@Transactional(readOnly = true)
-	public List<InformeAccountDTO> informeAccounts() {
-		return this.inscriptos.informeAccounts();
-	}
-
-	@Transactional(readOnly = true)
-	public List<InformeAccountCantEstudiantesDTO> accountsOrdenadas() {
-		return this.accountRepository.accountsOrdenadas();
-	} */
 }

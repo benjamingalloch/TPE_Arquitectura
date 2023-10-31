@@ -6,7 +6,9 @@ import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -27,12 +29,11 @@ public class User {
     private long id;
 
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private Set<UserAccount> accounts;
+    @ManyToMany(mappedBy = "users")
+    private List<Account> accounts = new ArrayList<>();
 
     public User(){
         super();
-        this.accounts = new HashSet<>();
     }
 
     public User(String name, String surname, long phoneNumber, String email) {
@@ -40,14 +41,22 @@ public class User {
         this.surname = surname;
         this.phoneNumber = phoneNumber;
         this.email = email;
-        this.accounts = new HashSet<>();
     }
 
-    public User(UserDTO dto){
+    public User(UserDTO dto) {
         this.name = dto.getName();
         this.surname = dto.getSurname();
         this.phoneNumber = dto.getPhoneNumber();
         this.email = dto.getEmail();
-        this.accounts = new HashSet<>();
+    }
+
+    public void addAccount(Account account) {
+        if (!this.accounts.contains(account)) {
+            this.accounts.add(account);
+        }
+    }
+
+    public void deleteAccount(Account account){
+        this.accounts.remove(account);
     }
 }
