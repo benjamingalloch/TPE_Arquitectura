@@ -21,7 +21,7 @@ public class StationController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(stationService.findAll());
         } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Intente nuevamente " + e.getMessage());
         }
     }
     @Operation(description = "Agrega estacion")
@@ -30,7 +30,7 @@ public class StationController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(stationService.save(entity));
         } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. No se pudo ingresar, revise los campos e intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo ingresar, revise los campos e intente nuevamente " + e.getMessage());
         }
     }
 
@@ -40,7 +40,7 @@ public class StationController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(stationService.findById(id));
         } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Intente nuevamente " + e.getMessage());
         }
     }
 
@@ -51,7 +51,7 @@ public class StationController {
             stationService.delete(id);
             return ResponseEntity.status(HttpStatus.OK).body("Se elimino correctamente la estacion con stationId: " + id);
         } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. No se pudo eliminar la estacion, revise los campos e intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error. No se pudo eliminar la estacion, revise los campos e intente nuevamente " + e.getMessage());
         }
     }
 
@@ -62,7 +62,7 @@ public class StationController {
             stationService.update(id, entity);
             return ResponseEntity.status(HttpStatus.OK).body("Se actualizaron correctamente los datos de la estacion con stationId: " + id);
         } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. No se pudieron actualizar los datos de la estacion, revise los campos e intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudieron actualizar los datos de la estacion, revise los campos e intente nuevamente " + e.getMessage());
         }
     }
 
