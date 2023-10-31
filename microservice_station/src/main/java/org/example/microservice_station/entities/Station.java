@@ -4,21 +4,25 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.example.microservice_station.dtos.StationDTO;
 
+import java.util.List;
+
 @Entity
 @Data
 @Table(name = "station")
 public class Station {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="station_id")
-    private long stationId;
+    @Column(name="id")
+    private long id;
 
     @Column(name = "latitude")
     private String latitude;
+
     @Column(name = "longitude")
     private String longitude;
 
-    //private List<Scooter> scooters; TODO: ver como hacer la relacion con scooter
+    @OneToMany(mappedBy = "station")
+    private List<StationScooter> stationScooters;
 
     public Station(){
         super();

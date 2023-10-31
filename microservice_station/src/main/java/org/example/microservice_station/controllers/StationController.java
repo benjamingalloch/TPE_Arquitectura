@@ -9,62 +9,82 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/stations")
+@RequestMapping("/estaciones")
 public class StationController {
 
     @Autowired
     private StationService stationService;
 
-    @Operation(summary = "Obtiene todas las estaciones.", description = "Obtiene todos las estaciones")
+    @Operation(description = "Obtiene todas las estaciones")
     @GetMapping("")
-    public ResponseEntity<?> getAll(){
-        try{
+    public ResponseEntity<?> getAll() {
+        try {
             return ResponseEntity.status(HttpStatus.OK).body(stationService.findAll());
-        }catch (Exception e){
+        } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
         }
     }
-
-    @Operation(summary = "Agrega una estacion.", description = "Agrega una estacion")
-    @PostMapping("/alta")
-    public ResponseEntity<?> save(@RequestBody StationDTO entity){
-        try{
+    @Operation(description = "Agrega estacion")
+    @PostMapping("")
+    public ResponseEntity<?> save(@RequestBody StationDTO entity) {
+        try {
             return ResponseEntity.status(HttpStatus.OK).body(stationService.save(entity));
-        }catch (Exception e){
+        } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. No se pudo ingresar, revise los campos e intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
         }
     }
 
-    @Operation(summary = "Obtiene una estacion por su id.", description = "Obtiene un estacion por su stationId")
-    @GetMapping("/buscar/{stationId}")
-    public ResponseEntity<?> getById(@PathVariable long stationId) {
-        try{
-            return ResponseEntity.status(HttpStatus.OK).body(stationService.findById(stationId));
-        }catch (Exception e){
+    @Operation(description = "Obtiene estacion por Id")
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getById(@PathVariable long id) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(stationService.findById(id));
+        } catch (Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
         }
     }
 
-    @Operation(summary = "Eliminia una estacion por su id.", description = "Elimina una estacion por su stationId")
-    @DeleteMapping("/eliminar/{stationId}")
-    public ResponseEntity<?> delete(@PathVariable long stationId){
-        try{
-            stationService.delete(stationId);
-            return ResponseEntity.status(HttpStatus.OK).body("Se elimino correctamente la estacion con stationId: " + stationId);
-        }catch (Exception e){
+    @Operation(description = "Elimina estacion por Id")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable long id) {
+        try {
+            stationService.delete(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Se elimino correctamente la estacion con stationId: " + id);
+        } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. No se pudo eliminar la estacion, revise los campos e intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
         }
     }
 
-    @Operation(summary = "Actualiza los datos de una estacion por su id.", description = "Actualiza una estacion por su stationId")
-    @PutMapping("/actualizar/{stationId}")
-    public ResponseEntity<?> update(@PathVariable long stationId, @RequestBody StationDTO entity){
-        try{
-            stationService.update(stationId, entity);
-            return ResponseEntity.status(HttpStatus.OK).body("Se actualizaron correctamente los datos de la estacion con stationId: " + stationId);
-        }catch (Exception e){
+    @Operation(description = "Actualiza estacion por Id")
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable long id, @RequestBody StationDTO entity) {
+        try {
+            stationService.update(id, entity);
+            return ResponseEntity.status(HttpStatus.OK).body("Se actualizaron correctamente los datos de la estacion con stationId: " + id);
+        } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. No se pudieron actualizar los datos de la estacion, revise los campos e intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
         }
     }
 
+    @Operation(description = "Agrega monopatin a estacion mediante Id")
+    @PostMapping("/{stationId}/monopatin/{scooterId}")
+    public ResponseEntity<?> addScooter(@PathVariable Long stationId, @PathVariable Long scooterId) {
+        try {
+            stationService.addScooter(stationId, scooterId);
+            return ResponseEntity.status(HttpStatus.OK).body("Se agrego el monopatin " + scooterId + " a la estacion " + stationId);
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo agregar el monopatin. Revise los campos. Error: " + e.getMessage());
+        }
+    }
+
+    @Operation(description = "Quitar monopatin de estacion mediante Id")
+    @DeleteMapping ("/{stationId}/monopatin/{scooterId}")
+    public ResponseEntity<?> removeScooter(@PathVariable Long stationId, @PathVariable Long scooterId) {
+        try {
+            stationService.removeScooter(stationId, scooterId);
+            return ResponseEntity.status(HttpStatus.OK).body("Se quito el monopatin " + scooterId + " a la estacion " + stationId);
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo quitar el monopatin. Revise los campos. Error: " + e.getMessage());
+        }
+    }
 }

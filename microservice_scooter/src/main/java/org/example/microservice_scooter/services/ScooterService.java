@@ -27,7 +27,7 @@ public class ScooterService{
     @Transactional(readOnly = true)
     public ScooterDTO findById(Long id) {
         return this.scooterRepository.findById(id).map(ScooterDTO::new).orElseThrow(
-                () -> new IllegalArgumentException("ID de monopatin invalido: " + id));
+                () -> new IllegalArgumentException("El ID de monopatin " + id + " es invalido"));
     }
 
     @Transactional

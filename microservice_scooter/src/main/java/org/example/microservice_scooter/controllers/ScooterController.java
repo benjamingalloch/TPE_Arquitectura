@@ -17,6 +17,7 @@ public class ScooterController {
     @Autowired
     private ScooterService scooterService;
 
+    @Operation(description = "Obtiene todas los monopatin")
     @GetMapping("")
     public ResponseEntity<?> getAll(){
         try{
@@ -26,6 +27,7 @@ public class ScooterController {
         }
     }
 
+    @Operation(description = "Agrega monopatin")
     @PostMapping("")
     public ResponseEntity<?> save(@RequestBody ScooterDTO scooterDTO){
         try{
@@ -35,6 +37,7 @@ public class ScooterController {
         }
     }
 
+    @Operation(description = "Obtiene monopatin por Id")
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable long id) {
         try{
@@ -44,6 +47,7 @@ public class ScooterController {
         }
     }
 
+    @Operation(description = "Elimina monopatin por Id")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable long id){
         try{
@@ -54,6 +58,7 @@ public class ScooterController {
         }
     }
 
+    @Operation(description = "Actualiza monopatin por Id")
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable long id, @RequestBody ScooterDTO scooterDTO){
         try{
