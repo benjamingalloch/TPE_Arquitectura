@@ -58,4 +58,11 @@ public class ScooterService{
     public List<ScooterUseTimeReportDTO> findByUsedTime(){
         return this.scooterRepository.findAllByOrderByUseTimeDesc().stream().map(ScooterUseTimeReportDTO::new ).toList();
     }
+
+    public void enableScooter(long id) {
+        Scooter scooter = scooterRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("ID de scooter invalido: " + id));
+        scooter.setStatus("FREE");
+        scooterRepository.save(scooter);
+    }
 }

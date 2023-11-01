@@ -16,75 +16,93 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
+    @Operation(description = "Trae todos los monopatines")
     @GetMapping("/monopatines")
     public ResponseEntity<?> getAllScooters() {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(adminService.findAllScooters());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error " + e.getMessage());
         }
     }
 
+    @Operation(description = "Crea nuevo monopatin")
     @PostMapping("/monopatines")
     public ResponseEntity<?> save(@RequestBody NewScooterDTO scooterDTO) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(adminService.saveNewScooter(scooterDTO));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error " + e.getMessage());
         }
     }
 
+    @Operation(description = "Elimina monopatin por Id")
     @DeleteMapping("/monopatines/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(adminService.deleteScooter(id));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error " + e.getMessage());
         }
     }
 
-    @GetMapping("informes/reporteDeMonopatinesPor/KilometrosRecorridos")
+    @Operation(description = "Obtiene informe de monopatines ordenados por kilometros recorridos") //??
+    @GetMapping("/informes/reporteDeMonopatinesPor/KilometrosRecorridos")
     public ResponseEntity<?> getKilometros() {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(adminService.getReportScootersByKms());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error " + e.getMessage());
         }
     }
 
-    @PostMapping("paradas/nueva")
+    @Operation(description = "Crea nueva parada")
+    @PostMapping("/estaciones/nueva")
     public ResponseEntity<?> save(@RequestBody StationDTO stationDTO) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(adminService.saveNewStation(stationDTO));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error " + e.getMessage());
         }
     }
 
-    @DeleteMapping("paradas/{id}")
+    @Operation(description = "Elimina parada mediante Id")
+    @DeleteMapping("/estaciones/{id}")
     public ResponseEntity<?> deleteStation(@PathVariable Long id) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(adminService.deleteStation(id));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error " + e.getMessage());
         }
     }
 
-    @PutMapping("cuentas/suspender/{id}")
+    @Operation(description = "Suspender cuenta mediante Id")
+    @PutMapping("/cuentas/{id}/suspender")
     public ResponseEntity<?> suspendAccount(@PathVariable Long id) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(adminService.suspendAccount(id));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error " + e.getMessage());
         }
     }
 
-    @PatchMapping("cuentas/activar/{id}")
+    @Operation(description = "Activar cuenta mediante Id")
+    @PatchMapping("/cuentas/{id}/activar")
     public ResponseEntity<?> activateAccount(@PathVariable Long id) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(adminService.activateAccount(id));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error " + e.getMessage());
+        }
+    }
+
+    @Operation(description = "Habilitar monopatin mediante Id")
+    @PutMapping("/monopatin/{id}/habilitar")
+    public ResponseEntity<?> enableScooter(@PathVariable Long id) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(adminService.enableScooter(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error " + e.getMessage());
         }
     }
 }

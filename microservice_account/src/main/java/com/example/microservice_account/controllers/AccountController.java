@@ -24,18 +24,9 @@ public class AccountController {
         try{
             return ResponseEntity.status(HttpStatus.OK).body(accountService.getAll());
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Intente nuevamente " + e.getMessage());
         }
     }
-
-   //@GetMapping("/accounts/users/{userId}")
-    //public ResponseEntity<?> getCuentasByUserId(@PathVariable long userId){
-    //    try{
-    //        return ResponseEntity.status(HttpStatus.OK).body(userAccountService.getCuentasByUserId(userId));
-    //    }catch (Exception e){
-    //        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
-    //    }
-    //}
 
     @Operation(summary = "Crea una nueva cuenta.", description = "Crea una cuenta")
     @PostMapping("/register")
@@ -43,7 +34,7 @@ public class AccountController {
         try{
             return ResponseEntity.status(HttpStatus.OK).body(accountService.save(entity));
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. No se pudo ingresar, revise los campos e intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Intente nuevamente " + e.getMessage());
         }
     }
 
@@ -53,7 +44,7 @@ public class AccountController {
         try{
             return ResponseEntity.status(HttpStatus.OK).body(accountService.findById(accountId));
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Intente nuevamente " + e.getMessage());
         }
     }
 
@@ -64,7 +55,7 @@ public class AccountController {
             accountService.delete(accountId);
             return ResponseEntity.status(HttpStatus.OK).body("Se elimino correctamente la cuenta con accountId: " + accountId);
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. No se pudo eliminar el account, revise los campos e intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Intente nuevamente " + e.getMessage());
         }
     }
 
@@ -75,7 +66,7 @@ public class AccountController {
             accountService.suspendAccount(accountId);
             return ResponseEntity.status(HttpStatus.OK).body("Se suspendio correctamente la cuenta con accountId: " + accountId);
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. No se pudo suspender la cuenta, revise los campos e intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Intente nuevamente " + e.getMessage());
         }
     }
 
@@ -86,7 +77,7 @@ public class AccountController {
             accountService.activateAccount(accountId);
             return ResponseEntity.status(HttpStatus.OK).body("Se activo correctamente la cuenta con accountId: " + accountId);
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. No se pudo activar la cuenta, revise los campos e intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Intente nuevamente " + e.getMessage());
         }
     }
 
@@ -97,7 +88,7 @@ public class AccountController {
             accountService.update(accountId, entity);
             return ResponseEntity.status(HttpStatus.OK).body("Se actualizo correctamente la cuenta con accountId: " + accountId);
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. No se pudo actualizar la cuenta, revise los campos e intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Intente nuevamente " + e.getMessage());
         }
     }
 
@@ -108,7 +99,7 @@ public class AccountController {
             accountService.linkUser(userId, accountId);
             return ResponseEntity.status(HttpStatus.OK).body("Se asocio correctamente el usuario con userId: " + userId + " a la cuenta con accountId: " + accountId);
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. No se pudo asociar el usuario a la cuenta, revise los campos e intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Intente nuevamente" + e.getMessage());
         }
     }
 
@@ -119,7 +110,7 @@ public class AccountController {
             accountService.unlinkUser(userId, accountId);
             return ResponseEntity.status(HttpStatus.OK).body("Se desvinculo correctamente el usuario con userId: " + userId + " de la cuenta con accountId: " + accountId);
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. No se pudo desvincular el usuario de la cuenta, revise los campos e intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Intente nuevamente " + e.getMessage());
         }
     }
 
@@ -129,7 +120,7 @@ public class AccountController {
         try{
             return ResponseEntity.status(HttpStatus.OK).body(accountService.getBalance(accountId));
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Intente nuevamente " + e.getMessage());
         }
     }
 
