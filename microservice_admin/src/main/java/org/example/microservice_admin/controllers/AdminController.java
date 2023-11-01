@@ -105,4 +105,14 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error " + e.getMessage());
         }
     }
+
+    @Operation(description = "Poner en mantenimiento monopatin mediante Id")
+    @PutMapping("/monopatin/{id}/mantenimiento")
+    public ResponseEntity<?> disableScooter(@PathVariable Long id) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(adminService.disableScooter(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error " + e.getMessage());
+        }
+    }
 }

@@ -100,4 +100,15 @@ public class ScooterController {
         }
     }
 
+    @Operation(description = "Poner en mantenimiento monopatin mediante Id")
+    @PutMapping("/mantenimiento/{id}")
+    public ResponseEntity<?> update(@PathVariable long id){
+        try{
+            scooterService.disableScooter(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Se puso en mantenimiento el monopatin con Id: " + id);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo poner en mantenimiento el monopatin" + e.getMessage());
+        }
+    }
+
 }

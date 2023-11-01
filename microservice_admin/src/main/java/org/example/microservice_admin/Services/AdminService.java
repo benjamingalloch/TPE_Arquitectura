@@ -161,5 +161,21 @@ public class AdminService{
         }
         return response;
     }
+
+    @Transactional(readOnly = true)
+    public Object disableScooter(Long id) throws Exception {
+
+        String accountUrl = "http://localhost:8082/monopatines/mantenimiento/" + id;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<StationDTO> requestEntity = new HttpEntity<>(headers);
+
+        ResponseEntity<Void> response = restTemplate.exchange(accountUrl, HttpMethod.PUT, requestEntity, Void.class);
+        if (response.getStatusCode() != HttpStatus.OK) {
+            throw new Exception("Error al poner en mantenimiento el monopatin con Id: " + id);
+        }
+        return response;
+    }
 }
 

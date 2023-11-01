@@ -65,4 +65,11 @@ public class ScooterService{
         scooter.setStatus("FREE");
         scooterRepository.save(scooter);
     }
+
+    public void disableScooter(long id) {
+        Scooter scooter = scooterRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("ID de scooter invalido: " + id));
+        scooter.setStatus("OUT OF SERVICE");
+        scooterRepository.save(scooter);
+    }
 }
