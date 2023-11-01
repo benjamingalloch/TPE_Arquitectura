@@ -9,12 +9,14 @@ import java.time.LocalDate;
 @Getter
 @RequiredArgsConstructor
 public class AccountDTO {
+    private long id;
     private LocalDate registerDate;
     private boolean available;
     private String idMPago;
     private Double balance;
 
     public AccountDTO(Account account) {
+        this.id = account.getId();
         this.registerDate = account.getRegisterDate();
         this.available = account.isAvailable();
         this.balance = account.getBalance();

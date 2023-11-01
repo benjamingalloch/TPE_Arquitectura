@@ -2,16 +2,21 @@ package org.example.microservice_scooter.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NonNull;
 import org.example.microservice_scooter.dtos.ScooterDTO;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Data
+@Getter
 @Table(name = "scooter")
 public class Scooter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name = "id")
     private long id;
 
     @Column(name = "latitude")
@@ -29,13 +34,20 @@ public class Scooter {
     @Column(name = "use_time")
     private int useTime;
 
+    @Column(name = "pause_time")
+    private int pauseTime;
+
+    @OneToMany(mappedBy = "scooter")
+    private List<Pause> pauses;
+
     public Scooter() {
         super();
-        this.status = "Free";
+        this.status = "FREE";
         this.kilometers = 0;
         this.useTime = 0;
         this.latitude = 0;
         this.longitude = 0;
+        this.pauses = new ArrayList<>();
     }
 
     public Scooter(@NonNull ScooterDTO dto) {
@@ -45,6 +57,7 @@ public class Scooter {
         this.status = dto.getStatus();
         this.kilometers = dto.getKilometers();
         this.useTime = dto.getUseTime();
+        this.pauses = new ArrayList<>();
     }
 
     public void updateFromDTO(@NonNull ScooterDTO scooter){
@@ -53,5 +66,13 @@ public class Scooter {
         this.status = scooter.getStatus();
         this.kilometers = scooter.getKilometers();
         this.useTime = scooter.getUseTime();
+    }
+
+    public void addPause(Pause pause) {
+        this.pauses.add(pause);
+    }
+
+    public Pause getLastPause() {
+        return this.pauses.getLast();
     }
 }

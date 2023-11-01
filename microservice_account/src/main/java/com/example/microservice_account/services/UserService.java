@@ -1,5 +1,6 @@
 package com.example.microservice_account.services;
 
+import com.example.microservice_account.DTOs.AccountDTO;
 import com.example.microservice_account.DTOs.UserDTO;
 import com.example.microservice_account.entities.Account;
 import com.example.microservice_account.entities.User;
@@ -63,6 +64,8 @@ public class UserService{
                 .orElseThrow(() -> new IllegalArgumentException("ID de cuenta invalido: " + accountId));
 
         user.addAccount(account);
+        account.addUser(user);
+        accountRepository.save(account);
         userRepository.save(user);
     }
 
@@ -78,4 +81,7 @@ public class UserService{
         user.deleteAccount(account);
     }
 
+    public List<AccountDTO> getCuentasByUserId(long userId) {
+        return this.userRepository.getAccountsByUserId(userId).stream().map(AccountDTO::new ).toList();
+    }
 }
