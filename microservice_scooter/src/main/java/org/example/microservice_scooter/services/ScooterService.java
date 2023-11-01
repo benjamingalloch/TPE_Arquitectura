@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import org.example.microservice_scooter.dtos.ScooterDTO;
 import org.example.microservice_scooter.dtos.ScooterKilometersReportDTO;
 import org.example.microservice_scooter.dtos.ScooterUseTimeReportDTO;
+import org.example.microservice_scooter.entities.Pause;
 import org.example.microservice_scooter.entities.Scooter;
+import org.example.microservice_scooter.repositories.PauseRepository;
 import org.example.microservice_scooter.repositories.ScooterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,9 @@ public class ScooterService{
 
     @Autowired
     private ScooterRepository scooterRepository;
+
+    @Autowired
+    private PauseRepository pauseRepository;
 
     @Transactional(readOnly = true)
     public List<ScooterDTO> findAll() {
@@ -50,12 +55,29 @@ public class ScooterService{
     }
 
     @Transactional
-    public List<ScooterKilometersReportDTO> findByKilometers(){
+    public List<ScooterKilometersReportDTO> findByKilometers() {
         return this.scooterRepository.findAllByOrderByKilometersDesc().stream().map(ScooterKilometersReportDTO::new ).toList();
     }
 
     @Transactional
-    public List<ScooterUseTimeReportDTO> findByUsedTime(){
+    public List<ScooterUseTimeReportDTO> findByUsedTime() {
         return this.scooterRepository.findAllByOrderByUseTimeDesc().stream().map(ScooterUseTimeReportDTO::new ).toList();
     }
+
+    @Transactional
+    public Scooter startPause(long scooterId) {
+        Scooter scooter = scooterRepository.findById(scooterId).orElseThrow(
+                () -> new IllegalArgumentException("El ID de monopatin " + scooterId + " es invalido"));
+        Pause pause = new Pause(scooter);
+        scooter.addPause(pause);
+        return scooterRepository.save(scooter);
+    }
+    @Transactional
+    public Scooter endPause(long scooterId) {
+        Scooter scooter = scooterRepository.findById(scooterId).orElseThrow(
+                () -> new IllegalArgumentException("El ID de monopatin " + scooterId + " es invalido"));
+        scooter.getLastPause().endPause();
+        return scooterRepository.save(scooter);
+    }
+
 }

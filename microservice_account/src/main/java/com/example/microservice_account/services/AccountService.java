@@ -63,7 +63,9 @@ public class AccountService{
                 .orElseThrow(() -> new IllegalArgumentException("ID de cuenta invalido: " + accountId));
 
         account.addUser(user);
+        user.addAccount(account);
         accountRepository.save(account);
+        userRepository.save(user);
     }
 
     @Transactional

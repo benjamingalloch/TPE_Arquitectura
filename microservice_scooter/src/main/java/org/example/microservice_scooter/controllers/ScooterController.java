@@ -17,64 +17,82 @@ public class ScooterController {
     @Autowired
     private ScooterService scooterService;
 
-    @Operation(description = "Obtiene todas los monopatin")
+    @Operation(description = "Obtiene todas los monopatines")
     @GetMapping("")
     public ResponseEntity<?> getAll(){
         try{
             return ResponseEntity.status(HttpStatus.OK).body(scooterService.findAll());
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
-    @Operation(description = "Agrega monopatin")
+    @Operation(description = "Agrega un monopatin")
     @PostMapping("")
     public ResponseEntity<?> save(@RequestBody ScooterDTO scooterDTO){
         try{
             return ResponseEntity.status(HttpStatus.OK).body(scooterService.save(scooterDTO));
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. No se pudo ingresar, revise los campos e intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
-    @Operation(description = "Obtiene monopatin por Id")
+    @Operation(description = "Obtiene monopatin por su id")
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable long id) {
         try{
             return ResponseEntity.status(HttpStatus.OK).body(scooterService.findById(id));
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
-    @Operation(description = "Elimina monopatin por Id")
+    @Operation(description = "Elimina monopatin por su id")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable long id){
         try{
             scooterService.delete(id);
             return ResponseEntity.status(HttpStatus.OK).body("Se elimino correctamente el monopatin con id: " + id);
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. No se pudo eliminar el monopatin, revise los campos e intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo eliminar el monopatin. " + e.getMessage());
         }
     }
 
-    @Operation(description = "Actualiza monopatin por Id")
+    @Operation(description = "Actualiza monopatin por su id")
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable long id, @RequestBody ScooterDTO scooterDTO){
+    public ResponseEntity<?> update(@PathVariable long id, @RequestBody ScooterDTO scooterDTO) {
         try{
             scooterService.update(id, scooterDTO);
             return ResponseEntity.status(HttpStatus.OK).body("Se actualizaron correctamente los datos del monopatin con id: " + id);
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. No se pudieron actualizar los datos, revise los campos e intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudieron actualizar los datos. " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}/pausar")
+    public ResponseEntity<?> startPause(@PathVariable long id) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(scooterService.startPause(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}/despausar")
+    public ResponseEntity<?> endPause(@PathVariable long id) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(scooterService.endPause(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @GetMapping("/reporte/kilometros")
-    public ResponseEntity<?> getReportByKilometers(){
+    public ResponseEntity<?> getReportByKilometers() {
         try{
             return ResponseEntity.status(HttpStatus.OK).body(scooterService.findByKilometers());
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -83,7 +101,7 @@ public class ScooterController {
         try{
             return ResponseEntity.status(HttpStatus.OK).body(scooterService.findByUsedTime());
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Intente nuevamente.\"\n\"error\":\"" + e.getMessage()+"\"}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 }
