@@ -58,11 +58,11 @@ public class AdminController {
     }
 
     //------------------------------------------------------------ PUNTO 3 E ------------------------------------------------------------
-    @Operation(description = "Trae todos los monopatines por estado")
-    @GetMapping("/monopatines/{status}")
-    public ResponseEntity<?> getAllScootersByStatus(@PathVariable String status) {
+    @Operation(description = "Trae la cantidad de monopatines por estado")
+    @GetMapping("/monopatines/cantidad/{status}")
+    public ResponseEntity<?> countScootersByStatus(@PathVariable String status) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(adminService.getAllScootersByStatus(status));
+            return ResponseEntity.status(HttpStatus.OK).body(adminService.countScootersByStatus(status));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error " + e.getMessage());
         }

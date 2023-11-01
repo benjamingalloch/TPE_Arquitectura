@@ -29,16 +29,17 @@ public class ScooterController {
         }
     }
 
-    @Operation(description = "Obtiene todas los monopatines")
-    @GetMapping("")
-    public ResponseEntity<?> getAll(){
+    //------------------------------------------------------------ PUNTO 3 E ------------------------------------------------------------
+    @Operation(description = "Trae la cantidad de monopatines por estado")
+    @GetMapping("/cantidad/{status}")
+    public ResponseEntity<?> countScootersByStatus(@PathVariable String status){
         try{
-            return ResponseEntity.status(HttpStatus.OK).body(scooterService.findAll());
+            return ResponseEntity.status(HttpStatus.OK).body(scooterService.countScootersByStatus(status));
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al obtener monopatines. " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al obtener cantiad de monopatines " + e.getMessage());
         }
     }
-
+    //-----------------------------------------------------------------------------------------------------------------------------------
     @Operation(description = "Agrega un monopatin")
     @PostMapping("")
     public ResponseEntity<?> save(@RequestBody ScooterDTO scooterDTO){
