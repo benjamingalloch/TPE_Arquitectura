@@ -1,6 +1,7 @@
 package org.example.microservice_admin.Services;
 
 import org.example.microservice_admin.DTOs.BillDTO;
+import org.example.microservice_admin.DTOs.DateFromUntilDTO;
 import org.example.microservice_admin.DTOs.NewBillDTO;
 import org.example.microservice_admin.Entities.Bill;
 import org.example.microservice_admin.Repositories.BillRepository;
@@ -8,12 +9,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service("billService")
 public class BillService{
     @Autowired
     private BillRepository billRepository;
+
+    //------------------------------------------------------------ PUNTO 3 D ------------------------------------------------------------
+    @Transactional
+    public double getBillingByTime(DateFromUntilDTO dateFromUntilDTO) throws Exception {
+        LocalDateTime startDate = dateFromUntilDTO.getStartDate();
+        LocalDateTime finishDate = dateFromUntilDTO.getFinishDate();
+
+        if (startDate.isAfter(finishDate)) {
+            throw new Exception("La fecha inicial no puede ser posterior a la final");
+        }
+
+        Double billing = this.billRepository.getBillingByTime(startDate, finishDate);
+        if (billing != null) {
+            return billing;
+        } else {
+            throw new NoSuchElementException("No se encontró información de facturación para el rango de fechas proporcionado");
+        }
+    }
 
     @Transactional(readOnly = true)
     public List<BillDTO> findAll() {
@@ -47,9 +68,11 @@ public class BillService{
         billRepository.save(bill);
     }
 
-    @Transactional(readOnly = true)
-    public Double getBilling(String dateFrom, String dateTo) {
-        return this.billRepository.getBilling(dateFrom, dateTo);
-    }
+
+
+    //@Transactional(readOnly = true)
+    //public Double getBilling(String dateFrom, String dateTo) {
+    //    return this.billRepository.getBilling(dateFrom, dateTo);
+    //}
 
 }

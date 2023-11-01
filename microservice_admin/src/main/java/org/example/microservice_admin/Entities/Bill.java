@@ -6,6 +6,7 @@ import org.example.microservice_admin.DTOs.BillDTO;
 import org.example.microservice_admin.DTOs.NewBillDTO;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -18,9 +19,11 @@ public class Bill {
     private long id;
 
     @Column(name="bill_date")
-    private Timestamp billDate;
+    private LocalDateTime billDate;
+
     @Column(name="amount")
     private Double amount;
+
     @Column(name="description")
     private String description;
 
@@ -28,7 +31,7 @@ public class Bill {
         super();
     }
 
-    public Bill(Timestamp billDate, Double amount, String description) {
+    public Bill(LocalDateTime  billDate, Double amount, String description) {
         this.billDate = billDate;
         this.amount = amount;
         this.description = description;

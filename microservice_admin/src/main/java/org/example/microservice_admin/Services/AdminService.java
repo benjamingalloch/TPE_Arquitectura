@@ -1,9 +1,7 @@
 package org.example.microservice_admin.Services;
 
-import org.example.microservice_admin.DTOs.NewScooterDTO;
-import org.example.microservice_admin.DTOs.ScooterDTO;
-import org.example.microservice_admin.DTOs.ScooterKilometersReportDTO;
-import org.example.microservice_admin.DTOs.StationDTO;
+import org.example.microservice_admin.DTOs.*;
+import org.example.microservice_admin.Repositories.BillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -11,12 +9,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service("adminService")
 public class AdminService{
     @Autowired
     private RestTemplate restTemplate = new RestTemplate();
+
+    @Autowired
+    private BillRepository billRepository;
 
     @Transactional
     public List<ScooterDTO> findAllScooters() throws Exception {
@@ -35,6 +39,59 @@ public class AdminService{
             throw new Exception("Error al obtener monopatines");
         }
     }
+
+    //------------------------------------------------------------ PUNTO 3 B ------------------------------------------------------------
+    @Transactional
+    public ResponseEntity<?> suspendAccount(long accountId) throws Exception {
+        String accountUrl = "http://localhost:8084/cuentas/suspender/" + accountId;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<StationDTO> requestEntity = new HttpEntity<>(headers);
+
+        ResponseEntity<Void> response = restTemplate.exchange(accountUrl, HttpMethod.PUT, requestEntity, Void.class);
+        if (response.getStatusCode() != HttpStatus.OK) {
+            throw new Exception("Error al suspender la cuenta " + accountId);
+        }
+        return response;
+    }
+
+    @Transactional
+    public ResponseEntity<?> activateAccount(long accountId) throws Exception {
+        String accountUrl = "http://localhost:8084/cuentas/habilitar/" + accountId;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<StationDTO> requestEntity = new HttpEntity<>(headers);
+
+        ResponseEntity<Void> response = restTemplate.exchange(accountUrl, HttpMethod.PUT, requestEntity, Void.class);
+        if (response.getStatusCode() != HttpStatus.OK) {
+            throw new Exception("Error al activar la cuenta " + accountId);
+        }
+        return response;
+    }
+
+    //------------------------------------------------------------ PUNTO 3 C ------------------------------------------------------------
+    public List<ScooterDTO> findScootersByYear(int year, int minimTrips) throws Exception {
+        String scooterUrl = "http://localhost:8082/monopatines/año/" + year + "/minimos-viajes/" + minimTrips;
+
+        ResponseEntity<List<ScooterDTO>> responseEntity = restTemplate.exchange(
+                scooterUrl,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<ScooterDTO>>() {}
+        );
+
+        if (responseEntity.getStatusCode().is2xxSuccessful()) {
+            return responseEntity.getBody();
+        } else {
+            throw new Exception("Error al obtener monopatines");
+        }
+    }
+
+
+
+
     @Transactional
     public ResponseEntity<?> saveNewScooter(NewScooterDTO scooterDTO) throws Exception {
         String scooterUrl = "http://localhost:8082/monopatines";
@@ -99,35 +156,9 @@ public class AdminService{
         return response;
     }
 
-    @Transactional
-    public ResponseEntity<?> suspendAccount(long accountId) throws Exception {
-        String accountUrl = "http://localhost:8003/cuentas/suspender/" + accountId;
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<StationDTO> requestEntity = new HttpEntity<>(headers);
 
-        ResponseEntity<Void> response = restTemplate.exchange(accountUrl, HttpMethod.PUT, requestEntity, Void.class);
-        if (response.getStatusCode() != HttpStatus.OK) {
-            throw new Exception("Error al suspender la cuenta " + accountId);
-        }
-        return response;
-    }
 
-    @Transactional
-    public ResponseEntity<?> activateAccount(long accountId) throws Exception {
-        String accountUrl = "http://localhost:8003/cuentas/activar/" + accountId;
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<StationDTO> requestEntity = new HttpEntity<>(headers);
-
-        ResponseEntity<Void> response = restTemplate.exchange(accountUrl, HttpMethod.PATCH, requestEntity, Void.class);
-        if (response.getStatusCode() != HttpStatus.OK) {
-            throw new Exception("Error al activar la cuenta " + accountId);
-        }
-        return response;
-    }
 
     @Transactional(readOnly = true)
     public List<ScooterKilometersReportDTO> getReportScootersByKms() throws Exception {
@@ -177,5 +208,7 @@ public class AdminService{
         }
         return response;
     }
+
+
 }
 

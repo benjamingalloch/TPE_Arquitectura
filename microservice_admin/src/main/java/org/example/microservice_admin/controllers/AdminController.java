@@ -1,13 +1,17 @@
 package org.example.microservice_admin.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
+import org.example.microservice_admin.DTOs.DateFromUntilDTO;
 import org.example.microservice_admin.DTOs.NewScooterDTO;
 import org.example.microservice_admin.DTOs.StationDTO;
 import org.example.microservice_admin.Services.AdminService;
+import org.example.microservice_admin.Services.BillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 
 @RestController
 @RequestMapping("/administracion")
@@ -15,6 +19,47 @@ public class AdminController {
 
     @Autowired
     private AdminService adminService;
+
+    @Autowired
+    private BillService billService;
+
+
+    //------------------------------------------------------------ PUNTO 3 B ------------------------------------------------------------
+    @Operation(description = "Suspender cuenta mediante Id")
+    @PutMapping("/cuenta/{id}/suspender")
+    public ResponseEntity<?> suspendAccount(@PathVariable Long id) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(adminService.suspendAccount(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error " + e.getMessage());
+        }
+    }
+
+    //------------------------------------------------------------ PUNTO 3 C ------------------------------------------------------------
+    @Operation(description = "Trae todos los monopatines con x viajes en j año")
+    @GetMapping("/monopatines/año/{year}/minimos-viajes/{minimTrips}")
+    public ResponseEntity<?> getScootersByYear(@PathVariable int year, @PathVariable int minimTrips) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(adminService.findScootersByYear(year, minimTrips));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error " + e.getMessage());
+        }
+    }
+
+    //------------------------------------------------------------ PUNTO 3 D ------------------------------------------------------------
+    @Operation(description = "Obtiene total facturado en un rango de meses de un año") //??
+    @GetMapping("/facturacion/entre")
+    public ResponseEntity<?> getBillingByTime(@RequestBody DateFromUntilDTO dateFromUntilDTO) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(billService.getBillingByTime(dateFromUntilDTO));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error " + e.getMessage());
+        }
+    }
+
+
+    //-----------------------------------------------------------------------------------------------------------------------------------
+
 
     @Operation(description = "Trae todos los monopatines")
     @GetMapping("/monopatines")
@@ -76,18 +121,8 @@ public class AdminController {
         }
     }
 
-    @Operation(description = "Suspender cuenta mediante Id")
-    @PutMapping("/cuentas/{id}/suspender")
-    public ResponseEntity<?> suspendAccount(@PathVariable Long id) {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(adminService.suspendAccount(id));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error " + e.getMessage());
-        }
-    }
-
     @Operation(description = "Activar cuenta mediante Id")
-    @PutMapping("/cuentas/{id}/activar")
+    @PutMapping("/cuenta/{id}/habilitar")
     public ResponseEntity<?> activateAccount(@PathVariable Long id) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(adminService.activateAccount(id));
@@ -115,4 +150,6 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error " + e.getMessage());
         }
     }
+
+
 }

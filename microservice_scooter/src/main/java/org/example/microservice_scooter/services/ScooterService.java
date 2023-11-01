@@ -28,7 +28,7 @@ public class ScooterService{
     public List<ScooterDTO> findAll() {
         return this.scooterRepository.findAll().stream().map(ScooterDTO::new ).toList();
     }
-
+    
     @Transactional(readOnly = true)
     public ScooterDTO findById(Long id) {
         return this.scooterRepository.findById(id).map(ScooterDTO::new).orElseThrow(

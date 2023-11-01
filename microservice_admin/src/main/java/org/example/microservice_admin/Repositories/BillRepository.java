@@ -5,10 +5,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 @Repository("billRepository")
 public interface BillRepository extends JpaRepository<Bill, Long> {
 
-    @Query(value = "SELECT SUM(charge) FROM bill WHERE bill_date BETWEEN ?1 AND ?2", nativeQuery = true)
-    Double getBilling(String dateFrom, String dateUntil);
+    @Query(value = "SELECT SUM(amount) FROM bill WHERE bill_date BETWEEN :dateFrom AND :dateUntil", nativeQuery = true)
+    Double getBillingByTime(LocalDateTime dateFrom, LocalDateTime dateUntil);
+
+
 }
 

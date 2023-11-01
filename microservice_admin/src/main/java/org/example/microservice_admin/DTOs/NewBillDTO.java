@@ -5,15 +5,16 @@ import lombok.RequiredArgsConstructor;
 import org.example.microservice_admin.Entities.Bill;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @RequiredArgsConstructor
 public class NewBillDTO {
-    private Timestamp billDate;
+    private LocalDateTime billDate;
     private Double amount;
     private String description;
 
-    public NewBillDTO(Timestamp billDate, Double amount, String description) {
+    public NewBillDTO(LocalDateTime  billDate, Double amount, String description) {
         this.billDate = billDate;
         this.amount = amount;
         this.description = description;
