@@ -60,25 +60,39 @@ public class ScooterService{
     }
 
     @Transactional
-    public List<ScooterUseTimeReportDTO> findByUsedTime() {
+    public List<ScooterUseTimeReportDTO> findByUseTime() {
         return this.scooterRepository.findAllByOrderByUseTimeDesc().stream().map(ScooterUseTimeReportDTO::new ).toList();
     }
 
     @Transactional
-    public Scooter startPause(long scooterId) {
+    public void startPause(long scooterId, long tripId, long userId) {
         Scooter scooter = scooterRepository.findById(scooterId).orElseThrow(
                 () -> new IllegalArgumentException("El ID de monopatin " + scooterId + " es invalido"));
-        Pause pause = new Pause(scooter);
-        scooter.addPause(pause);
-        return scooterRepository.save(scooter);
+
+        Pause activePause = scooter.getPause(tripId, userId);//Si hay una pausa activa, se puede reanudar
+        if (activePause != null) {
+            if (activePause.getTime() < 15) {
+                activePause.setEndTime(null);//Se setea en null para indicar que esa pausa se esta reanudando
+                scooterRepository.save(scooter);
+            } else {
+                throw new IllegalArgumentException("Limite de pausa alcanzado.");
+            }
+        } else {
+            Pause pause = new Pause(scooter, userId, tripId);
+            scooter.addPause(pause);
+            scooterRepository.save(scooter);
+        }
     }
   
     @Transactional
-    public Scooter endPause(long scooterId) {
+    public void endPause(long scooterId, long tripId, long userId) {
         Scooter scooter = scooterRepository.findById(scooterId).orElseThrow(
                 () -> new IllegalArgumentException("El ID de monopatin " + scooterId + " es invalido"));
-        scooter.getLastPause().endPause();
-        return scooterRepository.save(scooter);
+        Pause activePause = scooter.getPause(tripId, userId);
+        if (activePause != null) {
+            activePause.endPause();
+            scooterRepository.save(scooter);
+        }
     }
   
     @Transactional

@@ -23,7 +23,7 @@ public class ScooterController {
         try{
             return ResponseEntity.status(HttpStatus.OK).body(scooterService.findAll());
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Intente nuevamente " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al obtener monopatines. " + e.getMessage());
         }
     }
 
@@ -33,7 +33,7 @@ public class ScooterController {
         try{
             return ResponseEntity.status(HttpStatus.OK).body(scooterService.save(scooterDTO));
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Intente nuevamente " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al agregar monopatin. " + e.getMessage());
         }
     }
 
@@ -43,7 +43,7 @@ public class ScooterController {
         try{
             return ResponseEntity.status(HttpStatus.OK).body(scooterService.findById(id));
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Intente nuevamente " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error al obtener monopatin. " + e.getMessage());
         }
     }
 
@@ -54,7 +54,7 @@ public class ScooterController {
             scooterService.delete(id);
             return ResponseEntity.status(HttpStatus.OK).body("Se elimino correctamente el monopatin con id: " + id);
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Intente nuevamente " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al eliminar monopatin. " + e.getMessage());
         }
     }
 
@@ -65,25 +65,31 @@ public class ScooterController {
             scooterService.update(id, scooterDTO);
             return ResponseEntity.status(HttpStatus.OK).body("Se actualizaron correctamente los datos del monopatin con id: " + id);
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudieron actualizar los datos. " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al actualizar los datos. " + e.getMessage());
         }
     }
 
-    @PutMapping("/{id}/pausar")
-    public ResponseEntity<?> startPause(@PathVariable long id) {
+    @PutMapping("/{scooterId}/pausar/viaje/{tripId}/usuario/{userId}")
+    public ResponseEntity<?> startPause(@PathVariable long scooterId,
+                                        @PathVariable long tripId,
+                                        @PathVariable long userId) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(scooterService.startPause(id));
+            scooterService.startPause(scooterId, tripId, userId);
+            return ResponseEntity.status(HttpStatus.OK).body("La pausa inicio para el monopatin con id: " + scooterId);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al realizar la pausa. " + e.getMessage());
         }
     }
 
-    @PutMapping("/{id}/despausar")
-    public ResponseEntity<?> endPause(@PathVariable long id) {
+    @PutMapping("/{scooterId}/despausar/viaje/{tripId}/usuario/{userId}")
+    public ResponseEntity<?> endPause(@PathVariable long scooterId,
+                                      @PathVariable long tripId,
+                                      @PathVariable long userId) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(scooterService.endPause(id));
+            scooterService.endPause(scooterId, tripId, userId);
+            return ResponseEntity.status(HttpStatus.OK).body("La pausa finalizo correctamente.");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al frenar la pausa. " + e.getMessage());
         }
     }
 
@@ -92,16 +98,16 @@ public class ScooterController {
         try{
             return ResponseEntity.status(HttpStatus.OK).body(scooterService.findByKilometers());
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Intente nuevamente " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al obtener reporte. " + e.getMessage());
         }
     }
 
-    @GetMapping("/reporte/tiempoUso")
-    public ResponseEntity<?> getReportByUsedTime(){
+    @GetMapping("/reporte/tiempo-de-uso")
+    public ResponseEntity<?> getReportByUseTime(){
         try{
-            return ResponseEntity.status(HttpStatus.OK).body(scooterService.findByUsedTime());
+            return ResponseEntity.status(HttpStatus.OK).body(scooterService.findByUseTime());
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Intente nuevamente " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al obtener reporte. " + e.getMessage());
         }
     }
 
@@ -112,7 +118,7 @@ public class ScooterController {
             scooterService.enableScooter(id);
             return ResponseEntity.status(HttpStatus.OK).body("Se habilito el monopatin con Id: " + id);
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo habilitar el monopatin" + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al habilitar el monopatin" + e.getMessage());
         }
     }
 
@@ -123,7 +129,7 @@ public class ScooterController {
             scooterService.disableScooter(id);
             return ResponseEntity.status(HttpStatus.OK).body("Se puso en mantenimiento el monopatin con Id: " + id);
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo poner en mantenimiento el monopatin" + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al poner en mantenimiento el monopatin" + e.getMessage());
         }
     }
 

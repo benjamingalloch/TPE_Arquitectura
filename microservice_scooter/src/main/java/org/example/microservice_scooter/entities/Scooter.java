@@ -73,7 +73,30 @@ public class Scooter {
         this.pauses.add(pause);
     }
 
-    public Pause getLastPause() {
-        return this.pauses.getLast();
+    public Pause getPause(long userId, long tripId) { //SE PUEDE MEJORAR
+        for (Pause pause : pauses) {
+            if (pause.getScooter().equals(this)
+                    && pause.getId().getUserId() == userId
+                    && pause.getId().getTripId() == tripId) {
+                return pause;
+            }
+        }
+        return null; // Retorna null si no se encuentra ninguna pausa
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Scooter scooter = (Scooter) o;
+
+        return id == scooter.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (id ^ (id >>> 32));
+    }
+
 }
