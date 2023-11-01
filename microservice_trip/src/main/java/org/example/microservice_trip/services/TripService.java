@@ -21,6 +21,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service("tripService")
 public class TripService{
@@ -39,18 +40,20 @@ public class TripService{
     }
 
     @Transactional(readOnly = true)
-    public TripDTO findById(Long id) {
-        return this.tripRepository.findById(id).map(TripDTO::new).orElseThrow(
+    public TripDTO findById(long id) {
+        return this.tripRepository.findById(id).map(TripDTO::new ).orElseThrow(
                 () -> new IllegalArgumentException("ID de estacion invalido: " + id));
     }
 
     @Transactional
-    public TripDTO save(long userId, long scooterId) {
+    public TripDTO startTrip(long userId, long scooterId) {
+        //Verificar si el usuario existe
         ResponseEntity<UserDTO> user = restTemplate.getForEntity("http://localhost:8080/usuarios/" + userId, UserDTO.class);
         if (user.getStatusCode() != HttpStatus.OK) {
             throw new IllegalArgumentException("ID de usuario invalido: " + userId);
         }
 
+        //Verificar si posee cuentas
         ResponseEntity<List<AccountDTO>> accounts = restTemplate.exchange("http://localhost:8080/cuentas/usuario/" + userId,
                 HttpMethod.GET, null, new ParameterizedTypeReference<List<AccountDTO>>() {});
         if (accounts.getStatusCode() != HttpStatus.OK) {
@@ -64,9 +67,16 @@ public class TripService{
             }
         }
 
+        //Verificar si el monopatin existe
         ResponseEntity<ScooterDTO> scooter = restTemplate.getForEntity("http://localhost:8082/monopatines/" + scooterId, ScooterDTO.class);
         if (scooter.getStatusCode() != HttpStatus.OK) {
             throw new IllegalArgumentException("ID monopatin invalido: " + scooterId);
+        }
+
+        //Verificar si el viaje no existe
+        Optional<Trip> existentTrip = this.tripRepository.findByUserIdAndScooterId(userId, scooterId);
+        if (existentTrip.isPresent()) {
+            throw new IllegalArgumentException("El viaje ya existe y tiene id: " + existentTrip.get().getId());
         }
 
         Trip trip = new Trip(userId, scooterId, Timestamp.from(Instant.now()), null,0, 0.0, 0, 0);
@@ -105,7 +115,7 @@ public class TripService{
     }
 
     @Transactional
-    public void endTrip(Long id, double kilometers) throws Exception {
+    public void endTrip(long id, double kilometers) throws Exception {
         Trip trip = tripRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("No se encontro un viaje con id: " + id));
 
@@ -117,6 +127,13 @@ public class TripService{
                 trip.getStartTime().toInstant(),
                 trip.getEndTime().toInstant())
         );
+
+
+
+
+
+
+
 
         if (trip.getPauseTime() == 0) {
             trip.setRate(scooter.getBody().getUseTime() * getCurrentFlatRate());//esto tiene que ser con el tiempo
