@@ -89,6 +89,23 @@ public class AdminService{
         }
     }
 
+    //------------------------------------------------------------ PUNTO 3 E ------------------------------------------------------------
+    public List<ScooterDTO> getAllScootersByStatus(String status) throws Exception {
+        String scooterUrl = "http://localhost:8082/monopatines/" + status;
+
+        ResponseEntity<List<ScooterDTO>> responseEntity = restTemplate.exchange(
+                scooterUrl,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<ScooterDTO>>() {}
+        );
+        if (responseEntity.getStatusCode().is2xxSuccessful()) {
+            return responseEntity.getBody();
+        } else {
+            throw new Exception("Error al obtener monopatines desde admin");
+        }
+    }
+
     //------------------------------------------------------------------------------------------------------------------------------
 
     @Transactional
@@ -207,6 +224,7 @@ public class AdminService{
         }
         return response;
     }
+
 
 
 }
