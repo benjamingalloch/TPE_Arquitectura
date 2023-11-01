@@ -60,6 +60,16 @@ public class ScooterController {
         }
     }
 
+    @Operation(description = "Obtiene todos los monopatines")
+    @GetMapping("")
+    public ResponseEntity<?> getAll() {
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body(scooterService.findAll());
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error al obtener monopatines " + e.getMessage());
+        }
+    }
+
     @Operation(description = "Elimina monopatin por su id")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable long id){
