@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.microservice_scooter.entities.Scooter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @RequiredArgsConstructor
 public class ScooterDTO {
@@ -13,6 +16,8 @@ public class ScooterDTO {
     private String status;
     private double kilometers;
     private int useTime;
+    private List<PauseDTO> pauses = new ArrayList<>();
+
 
     public ScooterDTO(Scooter scooter) {
         this.id = scooter.getId();
@@ -21,9 +26,14 @@ public class ScooterDTO {
         this.status = scooter.getStatus();
         this.kilometers = scooter.getKilometers();
         this.useTime = scooter.getUseTime();
+        this.pauses.addAll(scooter.getPauses().stream().map(PauseDTO::new).toList());
     }
 
-    public ScooterDTO(double latitude, double longitude,String status, double kilometers, int useTime) {
+    public ScooterDTO(double latitude,
+                      double longitude,
+                      String status,
+                      double kilometers,
+                      int useTime) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.status = status;

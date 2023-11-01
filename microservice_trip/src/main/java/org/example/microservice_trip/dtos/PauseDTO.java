@@ -1,8 +1,7 @@
-package org.example.microservice_scooter.dtos;
+package org.example.microservice_trip.dtos;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.example.microservice_scooter.entities.Pause;
 
 import java.sql.Timestamp;
 
@@ -16,10 +15,10 @@ public class PauseDTO {
     private Timestamp endTime;
     private int time;
 
-    public PauseDTO(Pause pause){
-        this.userId = pause.getId().getUserId();
-        this.tripId = pause.getId().getTripId();
-        this.scooterId = pause.getScooter().getId();
+    public PauseDTO(PauseDTO pause){
+        this.userId = pause.getUserId();
+        this.tripId = pause.getTripId();
+        this.scooterId = pause.getScooterId();
         this.startTime = pause.getStartTime();
         this.endTime = pause.getEndTime();
         this.time = pause.getTime();
