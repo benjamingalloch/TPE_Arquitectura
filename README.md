@@ -12,14 +12,15 @@ b. Como administrador quiero poder anular cuentas para inhabilitar el uso moment
 misma.
 
 c. Como administrador quiero consultar los monopatines con más de X viajes en un cierto año.
+    GET http://localhost:8082/monopatines/año/{year}/minimos-viajes/{minimTrips}
 
 d. Como administrador quiero consultar el total facturado en un rango de meses de cierto año.
-GET http://localhost:8081/administracion/facturacion/entre
-JSON:
-{
-  "startDate": "2015-12-28T01:59:41Z",
-  "finishDate": "2020-12-08T00:08:31Z"
-}
+    GET http://localhost:8081/administracion/facturacion/entre
+    JSON:
+    {
+      "startDate": "2015-12-28T01:59:41Z",
+      "finishDate": "2020-12-08T00:08:31Z"
+    }
 
 
 e. Como administrador quiero consultar la cantidad de monopatines actualmente en operación,
@@ -35,21 +36,21 @@ un monopatín cerca de mi ubicación
 • Registrar monopatín en mantenimiento (debe marcarse como no disponible para su uso)
 
 • Registrar fin de mantenimiento de monopatín
-PUT http://localhost:8081/administracion/monopatin/4/habilitar
+    PUT http://localhost:8081/administracion/monopatin/4/habilitar
 
 ✔• Ubicar monopatín en parada (opcional)
 
 • Agregar monopatín 
-POST http://localhost:8081/administracion/monopatines
+    POST http://localhost:8081/administracion/monopatines
 
 • Quitar monopatín
-DELETE http://localhost:8081/administracion/monopatines/{id}
+    DELETE http://localhost:8081/administracion/monopatines/{id}
 
 • Registrar parada
-POST http://localhost:8081/administracion/estaciones/nueva
+    POST http://localhost:8081/administracion/estaciones/nueva
 
 • Quitar parada
-DELETE http://localhost:8081/administracion/estaciones/{id}
+    DELETE http://localhost:8081/administracion/estaciones/{id}
 
 • Definir precio
 
