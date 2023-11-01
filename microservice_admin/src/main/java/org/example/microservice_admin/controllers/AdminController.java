@@ -26,6 +26,28 @@ public class AdminController {
         }
     }
 
+    //------------------------------------------------------------ PUNTO 3 B ------------------------------------------------------------
+    @Operation(description = "Suspender cuenta mediante Id")
+    @PutMapping("/cuenta/{id}/suspender")
+    public ResponseEntity<?> suspendAccount(@PathVariable Long id) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(adminService.suspendAccount(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error " + e.getMessage());
+        }
+    }
+
+    //------------------------------------------------------------ PUNTO 3 C ------------------------------------------------------------
+    @Operation(description = "Trae todos los monopatines con x viajes en j año")
+    @GetMapping("/monopatines/año/{year}/minimos-viajes/{minimTrips}")
+    public ResponseEntity<?> getScootersByYear(@PathVariable int year, @PathVariable int minimTrips) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(adminService.findScootersByYear(year, minimTrips));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error " + e.getMessage());
+        }
+    }
+
     @Operation(description = "Crea nuevo monopatin")
     @PostMapping("/monopatines")
     public ResponseEntity<?> save(@RequestBody NewScooterDTO scooterDTO) {
@@ -76,18 +98,8 @@ public class AdminController {
         }
     }
 
-    @Operation(description = "Suspender cuenta mediante Id")
-    @PutMapping("/cuentas/{id}/suspender")
-    public ResponseEntity<?> suspendAccount(@PathVariable Long id) {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(adminService.suspendAccount(id));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error " + e.getMessage());
-        }
-    }
-
     @Operation(description = "Activar cuenta mediante Id")
-    @PutMapping("/cuentas/{id}/activar")
+    @PutMapping("/cuenta/{id}/habilitar")
     public ResponseEntity<?> activateAccount(@PathVariable Long id) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(adminService.activateAccount(id));
@@ -115,4 +127,6 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error " + e.getMessage());
         }
     }
+
+
 }

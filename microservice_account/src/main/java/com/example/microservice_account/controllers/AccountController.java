@@ -70,7 +70,7 @@ public class AccountController {
     }
 
     @Operation(description = "Activa una cuenta por su id")
-    @PutMapping("/activar/{id}")
+    @PutMapping("/habilitar/{id}")
     public ResponseEntity<?> activate(@PathVariable long id){
         try{
             accountService.activateAccount(id);
