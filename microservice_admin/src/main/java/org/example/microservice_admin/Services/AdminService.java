@@ -89,6 +89,12 @@ public class AdminService{
         }
     }
 
+    //------------------------------------------------------------ PUNTO 3 E ------------------------------------------------------------
+    public Long countScootersByStatus(String status) throws Exception {
+        String scooterUrl = "http://localhost:8082/monopatines/cantidad/" + status;
+        return restTemplate.getForObject(scooterUrl, Long.class);
+    }
+
     //------------------------------------------------------------------------------------------------------------------------------
 
     @Transactional
@@ -207,6 +213,7 @@ public class AdminService{
         }
         return response;
     }
+
 
 
 }

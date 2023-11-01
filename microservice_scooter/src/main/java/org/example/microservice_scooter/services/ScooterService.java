@@ -49,6 +49,16 @@ public class ScooterService{
         }
 
     }
+    //------------------------------------------------------------ PUNTO 3 E ------------------------------------------------------------
+    @Transactional(readOnly = true)
+    public long countScootersByStatus(String status) {
+        String ajusted = this.reemplaceMiddleDash(status);
+        return this.scooterRepository.countScootersByStatus(ajusted);
+    }
+
+    public String reemplaceMiddleDash(String string) {
+        return string.replace("-", " ");
+    }
 
     @Transactional(readOnly = true)
     public List<ScooterDTO> findAll() {
@@ -136,6 +146,7 @@ public class ScooterService{
         scooter.setStatus("OUT OF SERVICE");
         scooterRepository.save(scooter);
     }
+
 
 
 }

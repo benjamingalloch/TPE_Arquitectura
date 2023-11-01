@@ -30,6 +30,9 @@ d. Como administrador quiero consultar el total facturado en un rango de meses d
 
 e. Como administrador quiero consultar la cantidad de monopatines actualmente en operación,
 versus la cantidad de monopatines actualmente en mantenimiento.
+    GET http://localhost:8081/administracion/monopatines/cantidad/{status}
+    llama a:
+    GET http://localhost:8082/monopatines/cantidad/{status}
 
 f. Como administrador quiero hacer un ajuste de precios, y que a partir de cierta fecha el sistema
 habilite los nuevos precios.
