@@ -55,8 +55,7 @@ public class ScooterService{
         String ajusted = this.reemplaceMiddleDash(status);
         return this.scooterRepository.countScootersByStatus(ajusted);
     }
-
-    public String reemplaceMiddleDash(String string) {
+    private String reemplaceMiddleDash(String string) {
         return string.replace("-", " ");
     }
 
