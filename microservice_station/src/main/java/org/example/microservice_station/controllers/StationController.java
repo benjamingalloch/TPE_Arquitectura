@@ -21,7 +21,7 @@ public class StationController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(stationService.findAll());
         } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Intente nuevamente " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error " + e.getMessage());
         }
     }
     @Operation(description = "Agrega estacion")
@@ -40,7 +40,7 @@ public class StationController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(stationService.findById(id));
         } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Intente nuevamente " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error " + e.getMessage());
         }
     }
 

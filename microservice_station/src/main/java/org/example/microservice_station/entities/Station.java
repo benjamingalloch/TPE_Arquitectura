@@ -21,7 +21,7 @@ public class Station {
     @Column(name = "longitude")
     private String longitude;
 
-    @OneToMany(mappedBy = "station")
+    @OneToMany(mappedBy = "station", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StationScooter> stationScooters;
 
     public Station(){
