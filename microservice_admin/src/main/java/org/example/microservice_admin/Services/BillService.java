@@ -32,7 +32,7 @@ public class BillService{
         if (billing != null) {
             return billing;
         } else {
-            throw new NoSuchElementException("No se encontró información de facturación para el rango de fechas proporcionado");
+            return 0.00;
         }
     }
 

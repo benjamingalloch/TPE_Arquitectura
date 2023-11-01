@@ -9,8 +9,12 @@ import org.example.microservice_scooter.entities.Scooter;
 import org.example.microservice_scooter.repositories.PauseRepository;
 import org.example.microservice_scooter.repositories.ScooterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -23,6 +27,28 @@ public class ScooterService{
 
     @Autowired
     private PauseRepository pauseRepository;
+
+    @Autowired
+    private RestTemplate restTemplate = new RestTemplate();
+
+    //------------------------------------------------------------ PUNTO 3 C ------------------------------------------------------------
+    public List<ScooterDTO> findScootersByYear(int year, int minimTrips) throws Exception {
+        String scooterUrl = "http://localhost:8084/viajes/monopatines/año/" + year + "/minimos-viajes/" + minimTrips;
+
+        ResponseEntity<List<ScooterDTO>> responseEntity = restTemplate.exchange(
+                scooterUrl,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<ScooterDTO>>() {}
+        );
+
+        if (responseEntity.getStatusCode().is2xxSuccessful()) {
+            return responseEntity.getBody();
+        } else {
+            throw new Exception("Error al obtener monopatines del servicio trips");
+        }
+
+    }
 
     @Transactional(readOnly = true)
     public List<ScooterDTO> findAll() {
@@ -110,4 +136,6 @@ public class ScooterService{
         scooter.setStatus("OUT OF SERVICE");
         scooterRepository.save(scooter);
     }
+
+
 }

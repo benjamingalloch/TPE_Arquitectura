@@ -17,6 +17,18 @@ public class ScooterController {
     @Autowired
     private ScooterService scooterService;
 
+
+    //------------------------------------------------------------ PUNTO 3 C ------------------------------------------------------------
+    @Operation(description = "Trae todos los monopatines con x viajes en j año")
+    @GetMapping("/año/{year}/minimos-viajes/{minimTrips}")
+    public ResponseEntity<?> getScootersByYear(@PathVariable int year, @PathVariable int minimTrips){
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body(scooterService.findScootersByYear(year, minimTrips));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al obtener monopatines " + e.getMessage());
+        }
+    }
+
     @Operation(description = "Obtiene todas los monopatines")
     @GetMapping("")
     public ResponseEntity<?> getAll(){
