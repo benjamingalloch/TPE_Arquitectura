@@ -44,10 +44,12 @@ public class AdminService{
 
         HttpEntity<NewScooterDTO> requestEntity = new HttpEntity<>(scooterDTO, headers);
 
-        ResponseEntity<Void> response = restTemplate.exchange(scooterUrl, HttpMethod.PUT, requestEntity, Void.class);
+        ResponseEntity<Void> response = restTemplate.exchange(scooterUrl, HttpMethod.POST, requestEntity, Void.class);
         if (response.getStatusCode() != HttpStatus.OK) {
             throw new Exception("Error al guardar el nuevo monopatin");
         }
+
+
         return response;
     }
 
@@ -68,14 +70,14 @@ public class AdminService{
 
     @Transactional
     public ResponseEntity<?> saveNewStation(StationDTO stationDTO) throws Exception {
-        String stationUrl = "http://localhost:8001/estaciones/alta";
+        String stationUrl = "http://localhost:8083/estaciones";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<StationDTO> requestEntity = new HttpEntity<>(stationDTO, headers);
 
-        ResponseEntity<Void> response = restTemplate.exchange(stationUrl, HttpMethod.PUT, requestEntity, Void.class);
+        ResponseEntity<Void> response = restTemplate.exchange(stationUrl, HttpMethod.POST, requestEntity, Void.class);
         if (response.getStatusCode() != HttpStatus.OK) {
             throw new Exception("Error al guardar la nueva estacion");
         }
@@ -84,7 +86,7 @@ public class AdminService{
 
     @Transactional
     public ResponseEntity<?> deleteStation(long stationId) throws Exception {
-        String accountUrl = "http://localhost:8001/estaciones/eliminar/" + stationId;
+        String accountUrl = "http://localhost:8083/estaciones/" + stationId;
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -144,5 +146,36 @@ public class AdminService{
         return response.getBody();
     }
 
+    @Transactional(readOnly = true)
+    public Object enableScooter(Long id) throws Exception {
+
+        String accountUrl = "http://localhost:8082/monopatines/habilitar/" + id;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<StationDTO> requestEntity = new HttpEntity<>(headers);
+
+        ResponseEntity<Void> response = restTemplate.exchange(accountUrl, HttpMethod.PUT, requestEntity, Void.class);
+        if (response.getStatusCode() != HttpStatus.OK) {
+            throw new Exception("Error al habilitar el monopatin con Id: " + id);
+        }
+        return response;
+    }
+
+    @Transactional(readOnly = true)
+    public Object disableScooter(Long id) throws Exception {
+
+        String accountUrl = "http://localhost:8082/monopatines/mantenimiento/" + id;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<StationDTO> requestEntity = new HttpEntity<>(headers);
+
+        ResponseEntity<Void> response = restTemplate.exchange(accountUrl, HttpMethod.PUT, requestEntity, Void.class);
+        if (response.getStatusCode() != HttpStatus.OK) {
+            throw new Exception("Error al poner en mantenimiento el monopatin con Id: " + id);
+        }
+        return response;
+    }
 }
 

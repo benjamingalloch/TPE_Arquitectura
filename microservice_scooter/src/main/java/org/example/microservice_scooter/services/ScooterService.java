@@ -72,6 +72,7 @@ public class ScooterService{
         scooter.addPause(pause);
         return scooterRepository.save(scooter);
     }
+  
     @Transactional
     public Scooter endPause(long scooterId) {
         Scooter scooter = scooterRepository.findById(scooterId).orElseThrow(
@@ -79,5 +80,20 @@ public class ScooterService{
         scooter.getLastPause().endPause();
         return scooterRepository.save(scooter);
     }
-
+  
+    @Transactional
+    public void enableScooter(long id) {
+        Scooter scooter = scooterRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("ID de scooter invalido: " + id));
+        scooter.setStatus("FREE");
+        scooterRepository.save(scooter);
+    }
+  
+    @Transactional
+    public void disableScooter(long id) {
+        Scooter scooter = scooterRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("ID de scooter invalido: " + id));
+        scooter.setStatus("OUT OF SERVICE");
+        scooterRepository.save(scooter);
+    }
 }

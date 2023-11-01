@@ -23,7 +23,7 @@ public class AccountController {
         try{
             return ResponseEntity.status(HttpStatus.OK).body(accountService.getAll());
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Intente nuevamente " + e.getMessage());
         }
     }
 
@@ -43,7 +43,7 @@ public class AccountController {
         try{
             return ResponseEntity.status(HttpStatus.OK).body(accountService.findById(id));
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Intente nuevamente " + e.getMessage());
         }
     }
 
@@ -74,7 +74,7 @@ public class AccountController {
     public ResponseEntity<?> activate(@PathVariable long id){
         try{
             accountService.activateAccount(id);
-            return ResponseEntity.status(HttpStatus.OK).body("Se activo correctamente la cuenta con accountId: " + id);
+            return ResponseEntity.status(HttpStatus.OK).body("Se activo correctamente la cuenta con id: " + id);
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo activar la cuenta. " + e.getMessage());
         }
@@ -119,7 +119,7 @@ public class AccountController {
         try{
             return ResponseEntity.status(HttpStatus.OK).body(accountService.getBalance(id));
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Intente nuevamente " + e.getMessage());
         }
     }
 

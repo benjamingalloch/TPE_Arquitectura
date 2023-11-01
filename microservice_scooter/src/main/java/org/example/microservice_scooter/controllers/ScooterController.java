@@ -23,7 +23,7 @@ public class ScooterController {
         try{
             return ResponseEntity.status(HttpStatus.OK).body(scooterService.findAll());
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Intente nuevamente " + e.getMessage());
         }
     }
 
@@ -33,7 +33,7 @@ public class ScooterController {
         try{
             return ResponseEntity.status(HttpStatus.OK).body(scooterService.save(scooterDTO));
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Intente nuevamente " + e.getMessage());
         }
     }
 
@@ -43,7 +43,7 @@ public class ScooterController {
         try{
             return ResponseEntity.status(HttpStatus.OK).body(scooterService.findById(id));
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Intente nuevamente " + e.getMessage());
         }
     }
 
@@ -54,7 +54,7 @@ public class ScooterController {
             scooterService.delete(id);
             return ResponseEntity.status(HttpStatus.OK).body("Se elimino correctamente el monopatin con id: " + id);
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo eliminar el monopatin. " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Intente nuevamente " + e.getMessage());
         }
     }
 
@@ -92,7 +92,7 @@ public class ScooterController {
         try{
             return ResponseEntity.status(HttpStatus.OK).body(scooterService.findByKilometers());
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Intente nuevamente " + e.getMessage());
         }
     }
 
@@ -101,7 +101,30 @@ public class ScooterController {
         try{
             return ResponseEntity.status(HttpStatus.OK).body(scooterService.findByUsedTime());
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Intente nuevamente " + e.getMessage());
         }
     }
+
+    @Operation(description = "Habilitar monopatin por Id")
+    @PutMapping("/habilitar/{id}")
+    public ResponseEntity<?> activate(@PathVariable long id){
+        try{
+            scooterService.enableScooter(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Se habilito el monopatin con Id: " + id);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo habilitar el monopatin" + e.getMessage());
+        }
+    }
+
+    @Operation(description = "Poner en mantenimiento monopatin mediante Id")
+    @PutMapping("/mantenimiento/{id}")
+    public ResponseEntity<?> update(@PathVariable long id){
+        try{
+            scooterService.disableScooter(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Se puso en mantenimiento el monopatin con Id: " + id);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo poner en mantenimiento el monopatin" + e.getMessage());
+        }
+    }
+
 }
