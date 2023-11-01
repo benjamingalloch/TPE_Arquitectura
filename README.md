@@ -4,12 +4,20 @@ Autores:
   - Gallo Benjamin
   - Luque Atilio
 
+Implementamos normalRate y pauseRate. Durante la pausa (de maximo 15 minutos) se cobra pauseRate. Al finalizarse la pausa por accion del usuario o por transcurso de los 15 minutos (lo que ocurra primero), vuelve el normalRate. De esta manera logramos que usar la pausa tenga sentido para el usuario (ahorrando dinero), pero no deja de tener un minimo costo para no abusar siempre de la totalidad de la misma.
+Tambien tenemos una tabla con ambos precios y la fecha a partir de la cual se hacen efectivos, pudiendo cargar multiples periodos con sus precios.
+
+1ra ENTREGA
+
+3)
 a. Como encargado de mantenimiento quiero poder generar un reporte de uso de monopatines por
 kilómetros para establecer si un monopatín requiere de mantenimiento. Este reporte debe poder
 configurarse para incluir (o no) los tiempos de pausa.
 
 b. Como administrador quiero poder anular cuentas para inhabilitar el uso momentáneo de la
 misma.
+
+    PUT http://localhost:8081/cuenta/{id}/suspender
 
 c. Como administrador quiero consultar los monopatines con más de X viajes en un cierto año.
 
@@ -46,16 +54,15 @@ versus la cantidad de monopatines actualmente en mantenimiento.
 f. Como administrador quiero hacer un ajuste de precios, y que a partir de cierta fecha el sistema
 habilite los nuevos precios.
 
-g. Como usuario quiero lun listado de los monopatines cercanos a mi zona, para poder encontrar
+g. Como usuario quiero un listado de los monopatines cercanos a mi zona, para poder encontrar
 un monopatín cerca de mi ubicación
 
 
 • Registrar monopatín en mantenimiento (debe marcarse como no disponible para su uso)
+    PUT http://localhost:8081/administracion/monopatin/{id}/mantenimiento
 
 • Registrar fin de mantenimiento de monopatín
-    PUT http://localhost:8081/administracion/monopatin/4/habilitar
-
-✔• Ubicar monopatín en parada (opcional)
+    PUT http://localhost:8081/administracion/monopatin/{id}/habilitar
 
 • Agregar monopatín 
     POST http://localhost:8081/administracion/monopatines
@@ -68,13 +75,8 @@ un monopatín cerca de mi ubicación
 
 • Quitar parada
     DELETE http://localhost:8081/administracion/estaciones/{id}
-
-• Definir precio
-
-• Definir tarifa extra para reinicio por pausa extensa
-
-• Anular cuenta
-
+    
+TODO
 • Generar reporte de uso de monopatines por kilómetros
 
 • Generar reporte de uso de monopatines por tiempo con pausas
