@@ -66,7 +66,7 @@ public class ScooterController {
         try{
             return ResponseEntity.status(HttpStatus.OK).body(scooterService.findAll());
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error al obtener monopatines " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error al obtener monopatines en scooter service " + e.getMessage());
         }
     }
 

@@ -36,7 +36,7 @@ public class AdminService{
         if (responseEntity.getStatusCode().is2xxSuccessful()) {
             return responseEntity.getBody();
         } else {
-            throw new Exception("Error al obtener monopatines");
+            throw new Exception("Error al obtener monopatines en admin service");
         }
     }
 
