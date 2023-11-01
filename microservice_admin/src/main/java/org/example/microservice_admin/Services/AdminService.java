@@ -85,12 +85,11 @@ public class AdminService{
         if (responseEntity.getStatusCode().is2xxSuccessful()) {
             return responseEntity.getBody();
         } else {
-            throw new Exception("Error al obtener monopatines");
+            throw new Exception("Error al obtener monopatines del servicio monopatines");
         }
     }
 
-
-
+    //------------------------------------------------------------------------------------------------------------------------------
 
     @Transactional
     public ResponseEntity<?> saveNewScooter(NewScooterDTO scooterDTO) throws Exception {

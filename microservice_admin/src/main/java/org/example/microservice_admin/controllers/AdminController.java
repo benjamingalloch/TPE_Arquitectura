@@ -42,7 +42,7 @@ public class AdminController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(adminService.findScootersByYear(year, minimTrips));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al obtener monopatines " + e.getMessage());
         }
     }
 

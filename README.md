@@ -12,7 +12,12 @@ b. Como administrador quiero poder anular cuentas para inhabilitar el uso moment
 misma.
 
 c. Como administrador quiero consultar los monopatines con más de X viajes en un cierto año.
+    GET http://localhost:8081/administracion/monopatines/año/{year}/minimos-viajes/{minimTrips}
+    llama a:
     GET http://localhost:8082/monopatines/año/{year}/minimos-viajes/{minimTrips}
+    llama a:
+    GET http://localhost:8084/viajes/monopatines/año/{year}/minimos-viajes/{minimTrips}
+
 
 d. Como administrador quiero consultar el total facturado en un rango de meses de cierto año.
     GET http://localhost:8081/administracion/facturacion/entre
