@@ -47,7 +47,7 @@ public class AdminController {
     }
 
     //------------------------------------------------------------ PUNTO 3 D ------------------------------------------------------------
-    @Operation(description = "Obtiene total facturado en un rango de meses de un año") //??
+    @Operation(description = "Obtiene total facturado en un rango fechas") //??
     @GetMapping("/facturacion/entre")
     public ResponseEntity<?> getBillingByTime(@RequestBody DateFromUntilDTO dateFromUntilDTO) {
         try {
