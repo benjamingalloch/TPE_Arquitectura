@@ -4,6 +4,34 @@ Autores:
   - Gallo Benjamin
   - Luque Atilio
 
+a. Como encargado de mantenimiento quiero poder generar un reporte de uso de monopatines por
+kilómetros para establecer si un monopatín requiere de mantenimiento. Este reporte debe poder
+configurarse para incluir (o no) los tiempos de pausa.
+
+b. Como administrador quiero poder anular cuentas para inhabilitar el uso momentáneo de la
+misma.
+
+c. Como administrador quiero consultar los monopatines con más de X viajes en un cierto año.
+
+d. Como administrador quiero consultar el total facturado en un rango de meses de cierto año.
+GET http://localhost:8081/administracion/facturacion/entre
+JSON:
+{
+  "startDate": "2015-12-28T01:59:41Z",
+  "finishDate": "2020-12-08T00:08:31Z"
+}
+
+
+e. Como administrador quiero consultar la cantidad de monopatines actualmente en operación,
+versus la cantidad de monopatines actualmente en mantenimiento.
+
+f. Como administrador quiero hacer un ajuste de precios, y que a partir de cierta fecha el sistema
+habilite los nuevos precios.
+
+g. Como usuario quiero lun listado de los monopatines cercanos a mi zona, para poder encontrar
+un monopatín cerca de mi ubicación
+
+
 • Registrar monopatín en mantenimiento (debe marcarse como no disponible para su uso)
 
 • Registrar fin de mantenimiento de monopatín
