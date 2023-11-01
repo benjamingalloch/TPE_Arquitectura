@@ -87,7 +87,7 @@ public class AdminController {
     }
 
     @Operation(description = "Activar cuenta mediante Id")
-    @PatchMapping("/cuentas/{id}/activar")
+    @PutMapping("/cuentas/{id}/activar")
     public ResponseEntity<?> activateAccount(@PathVariable Long id) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(adminService.activateAccount(id));
@@ -97,7 +97,7 @@ public class AdminController {
     }
 
     @Operation(description = "Habilitar monopatin mediante Id")
-    @PutMapping("/monopatin/{id}/habilitar")
+    @PutMapping ("/monopatin/{id}/habilitar")
     public ResponseEntity<?> enableScooter(@PathVariable Long id) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(adminService.enableScooter(id));

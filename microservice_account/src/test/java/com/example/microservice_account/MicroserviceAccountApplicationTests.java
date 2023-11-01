@@ -1,13 +1,12 @@
-package com.example.microservice_account;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@SpringBootTest
-class MicroserviceAccountApplicationTests {
-
-    @Test
-    void contextLoads() {
+@SpringBootApplication
+@EnableJpaRepositories
+public class MicroserviceAccountApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(MicroserviceAccountApplication.class, args);
     }
-
 }

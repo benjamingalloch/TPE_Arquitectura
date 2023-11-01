@@ -66,6 +66,7 @@ public class Scooter {
         this.status = scooter.getStatus();
         this.kilometers = scooter.getKilometers();
         this.useTime = scooter.getUseTime();
+
     }
 
     public void addPause(Pause pause) {

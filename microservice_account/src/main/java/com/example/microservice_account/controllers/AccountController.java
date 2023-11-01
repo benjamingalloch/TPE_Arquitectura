@@ -59,7 +59,7 @@ public class AccountController {
     }
 
     @Operation(description = "Desactiva una cuenta por su id")
-    @PutMapping("/suspend/{id}")
+    @PutMapping("/suspender/{id}")
     public ResponseEntity<?> suspend(@PathVariable long id){
         try{
             accountService.suspendAccount(id);
@@ -70,7 +70,7 @@ public class AccountController {
     }
 
     @Operation(description = "Activa una cuenta por su id")
-    @PutMapping("/activate/{id}")
+    @PutMapping("/activar/{id}")
     public ResponseEntity<?> activate(@PathVariable long id){
         try{
             accountService.activateAccount(id);
