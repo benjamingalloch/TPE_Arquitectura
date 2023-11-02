@@ -88,8 +88,8 @@ public class TripService{
 
         //Verificar si el viaje no esta vigente
         List<Trip> tripsOfUserAndScooter = this.tripRepository.findAllByUserIdAndScooterId(userId, scooterId);
-        if (!tripsOfUserAndScooter.isEmpty() && tripsOfUserAndScooter.getLast().getEndTime() == null) {
-            throw new IllegalArgumentException("El viaje ya existe y tiene id: " + tripsOfUserAndScooter.getLast().getId());
+        if (!tripsOfUserAndScooter.isEmpty() && (tripsOfUserAndScooter.get(tripsOfUserAndScooter.size() - 1).getEndTime() == null)) {
+            throw new IllegalArgumentException("El viaje ya existe y tiene id: " + tripsOfUserAndScooter.get(tripsOfUserAndScooter.size() - 1).getId());
         }
 
         //Creamos un viaje con algunos valores default
@@ -156,7 +156,7 @@ public class TripService{
         List<PauseDTO> scooterPauses = Objects.requireNonNull(scooterDTOResponseEntity.getBody()).getPauses();
         if (!scooterPauses.isEmpty()){
             //Setea el tiempo de la pausa
-            trip.setPauseTime(scooterDTOResponseEntity.getBody().getPauses().getLast().getTime());
+            trip.setPauseTime(scooterDTOResponseEntity.getBody().getPauses().get(scooterPauses.size() - 1).getTime());
         }
 
         trip.setEndTime(Timestamp.from(Instant.now()));
