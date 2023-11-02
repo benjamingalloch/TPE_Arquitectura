@@ -37,8 +37,8 @@ d. Como administrador quiero consultar el total facturado en un rango de meses d
     GET http://localhost:8081/administracion/facturacion/entre
     JSON:
     {
-      "startDate": "2015-12-28T01:59:41Z",
-      "finishDate": "2020-12-08T00:08:31Z"
+      "startDate": "2022-01-28T01:59:41Z",
+      "finishDate": "2023-05-08T00:08:31Z"
     }
 
 
