@@ -28,7 +28,7 @@ c. Como administrador quiero consultar los monopatines con más de X viajes en u
     
     *llama a:
     GET http://localhost:8082/monopatines/año/{year}/minimos-viajes/{minimTrips}
-    *llama a:
+    *llama a: *(falta implementar)*
     GET http://localhost:8084/viajes/monopatines/año/{year}/minimos-viajes/{minimTrips}
 
 
