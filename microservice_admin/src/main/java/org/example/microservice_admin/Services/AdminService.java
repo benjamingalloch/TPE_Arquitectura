@@ -36,7 +36,7 @@ public class AdminService{
         if (responseEntity.getStatusCode().is2xxSuccessful()) {
             return responseEntity.getBody();
         } else {
-            throw new Exception("Error al obtener monopatines");
+            throw new Exception("Error al obtener monopatines en admin service");
         }
     }
 
@@ -85,12 +85,17 @@ public class AdminService{
         if (responseEntity.getStatusCode().is2xxSuccessful()) {
             return responseEntity.getBody();
         } else {
-            throw new Exception("Error al obtener monopatines");
+            throw new Exception("Error al obtener monopatines del servicio monopatines");
         }
     }
 
+    //------------------------------------------------------------ PUNTO 3 E ------------------------------------------------------------
+    public Long countScootersByStatus(String status) throws Exception {
+        String scooterUrl = "http://localhost:8082/monopatines/cantidad/" + status;
+        return restTemplate.getForObject(scooterUrl, Long.class);
+    }
 
-
+    //------------------------------------------------------------------------------------------------------------------------------
 
     @Transactional
     public ResponseEntity<?> saveNewScooter(NewScooterDTO scooterDTO) throws Exception {
@@ -208,6 +213,7 @@ public class AdminService{
         }
         return response;
     }
+
 
 
 }

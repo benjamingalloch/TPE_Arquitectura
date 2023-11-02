@@ -42,12 +42,12 @@ public class AdminController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(adminService.findScootersByYear(year, minimTrips));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al obtener monopatines " + e.getMessage());
         }
     }
 
     //------------------------------------------------------------ PUNTO 3 D ------------------------------------------------------------
-    @Operation(description = "Obtiene total facturado en un rango fechas") //??
+    @Operation(description = "Obtiene total facturado en un rango fechas")
     @GetMapping("/facturacion/entre")
     public ResponseEntity<?> getBillingByTime(@RequestBody DateFromUntilDTO dateFromUntilDTO) {
         try {
@@ -57,6 +57,16 @@ public class AdminController {
         }
     }
 
+    //------------------------------------------------------------ PUNTO 3 E ------------------------------------------------------------
+    @Operation(description = "Trae la cantidad de monopatines por estado")
+    @GetMapping("/monopatines/cantidad/{status}")
+    public ResponseEntity<?> countScootersByStatus(@PathVariable String status) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(adminService.countScootersByStatus(status));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error " + e.getMessage());
+        }
+    }
 
     //-----------------------------------------------------------------------------------------------------------------------------------
 
