@@ -98,3 +98,6 @@ insert into scooter (id, latitude, longitude, status, kilometers, use_time) valu
 insert into scooter (id, latitude, longitude, status, kilometers, use_time) values (98, 44.819386, 4.596042, 'OUT OF SERVICE', 12.37, 64);
 insert into scooter (id, latitude, longitude, status, kilometers, use_time) values (99, -23.4697466, -57.2635114, 'BUSY', 74.12, 80);
 insert into scooter (id, latitude, longitude, status, kilometers, use_time) values (100, 15.9082382, 120.4291289, 'BUSY', 43.13, 162);
+
+insert into pause (time, end_time, scooter_id, start_time, trip_id, user_id) values (60, STR_TO_DATE('2023-07-20T10:46:16Z', '%Y-%m-%dT%H:%i:%sZ'), 2, STR_TO_DATE('2023-07-20T09:46:16Z', '%Y-%m-%dT%H:%i:%sZ'), 2, 1);
+insert into pause (time, end_time, scooter_id, start_time, trip_id, user_id) values (30, STR_TO_DATE('2023-07-25T16:45:00Z', '%Y-%m-%dT%H:%i:%sZ'), 5, STR_TO_DATE('2023-07-25T16:15:00Z', '%Y-%m-%dT%H:%i:%sZ'), 3, 6);

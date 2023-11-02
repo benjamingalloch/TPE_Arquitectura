@@ -34,7 +34,7 @@ public class Scooter {
     @Column(name = "use_time")
     private int useTime;
 
-    @OneToMany(mappedBy = "scooter")
+    @OneToMany(mappedBy = "scooter", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Pause> pauses;
 
     public Scooter() {
@@ -44,7 +44,6 @@ public class Scooter {
         this.useTime = 0;
         this.latitude = 0;
         this.longitude = 0;
-        this.pauses = new ArrayList<>();
     }
 
     public Scooter(@NonNull ScooterDTO dto) {
@@ -54,7 +53,6 @@ public class Scooter {
         this.status = dto.getStatus();
         this.kilometers = dto.getKilometers();
         this.useTime = dto.getUseTime();
-        this.pauses = new ArrayList<>();
     }
 
     public void updateFromDTO(@NonNull ScooterDTO scooter){
@@ -63,19 +61,18 @@ public class Scooter {
         this.status = scooter.getStatus();
         this.kilometers = scooter.getKilometers();
         this.useTime = scooter.getUseTime();
-
     }
 
     public void addPause(Pause pause) {
         this.pauses.add(pause);
     }
 
-    public Pause getPause(long userId, long tripId) { //SE PUEDE MEJORAR
-        for (Pause pause : pauses) {
-            if (pause.getScooter().equals(this)
-                    && pause.getId().getUserId() == userId
-                    && pause.getId().getTripId() == tripId) {
-                return pause;
+    public Pause getPause(long userId, long tripId) {
+        if (!this.pauses.isEmpty()) {
+            Pause activePause = this.pauses.get(this.pauses.size() - 1);
+            if (activePause.getId().getUserId() == userId
+            && activePause.getId().getTripId() == tripId) {
+                return activePause;
             }
         }
         return null; // Retorna null si no se encuentra ninguna pausa

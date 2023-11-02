@@ -3,6 +3,7 @@ package org.example.microservice_scooter.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
+import org.example.microservice_scooter.dtos.PauseDTO;
 
 import java.sql.Timestamp;
 import java.time.Duration;
@@ -58,5 +59,4 @@ public class Pause {
             this.time = (int) minutes;
         }
     }
-
 }

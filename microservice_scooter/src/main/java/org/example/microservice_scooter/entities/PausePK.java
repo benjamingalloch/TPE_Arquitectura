@@ -23,7 +23,6 @@ public class PausePK implements Serializable {
     }
 
     public PausePK(long userId, long tripId) {
-        super();
         this.userId = userId;
         this.tripId = tripId;
     }
@@ -35,7 +34,7 @@ public class PausePK implements Serializable {
 
         PausePK pausePK = (PausePK) o;
 
-        if (userId != pausePK.userId) return false;
-        return tripId == pausePK.tripId;
+        if (userId != pausePK.getUserId()) return false;
+        return tripId == pausePK.getTripId();
     }
 }

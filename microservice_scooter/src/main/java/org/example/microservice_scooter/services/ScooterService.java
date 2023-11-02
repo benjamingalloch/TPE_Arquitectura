@@ -104,19 +104,19 @@ public class ScooterService{
         Scooter scooter = scooterRepository.findById(scooterId).orElseThrow(
                 () -> new IllegalArgumentException("El ID de monopatin " + scooterId + " es invalido"));
 
-        Pause activePause = scooter.getPause(tripId, userId);//Si hay una pausa activa, se puede reanudar
-        if (activePause != null) {
-            if (activePause.getTime() < 15) {
-                activePause.setEndTime(null);//Se setea en null para indicar que esa pausa se esta reanudando
-                scooterRepository.save(scooter);
-            } else {
-                throw new IllegalArgumentException("Limite de pausa alcanzado.");
-            }
-        } else {
+//        Pause activePause = scooter.getPause(tripId, userId);//Si hay una pausa activa, se puede reanudar
+//        if (activePause != null) {
+//            if (activePause.getTime() < 15) {
+//                activePause.setEndTime(null);//Se setea en null para indicar que esa pausa se esta reanudando
+//                scooterRepository.save(scooter);
+//            } else {
+//                throw new IllegalArgumentException("Limite de pausa alcanzado.");
+//            }
+//        } else {
             Pause pause = new Pause(scooter, userId, tripId);
             scooter.addPause(pause);
             scooterRepository.save(scooter);
-        }
+//        }
     }
   
     @Transactional
