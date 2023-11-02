@@ -57,8 +57,21 @@ versus la cantidad de monopatines actualmente en mantenimiento.
 f. Como administrador quiero hacer un ajuste de precios, y que a partir de cierta fecha el sistema
 habilite los nuevos precios.
 
+        POST http://localhost:8081/administracion/monopatines/cantidad/{status}
+        JSON:
+            {
+                "date": "2025-07-26",
+                "normalRate": 12.0,
+                "pauseRate": 4.3
+            }
+
+        *llama a:
+        POST http://localhost:8085/viajes/agregar-tarifas-desde
+
+
 g. Como usuario quiero un listado de los monopatines cercanos a mi zona, para poder encontrar
 un monopatín cerca de mi ubicación
+        TODO
 
 
 • Registrar monopatín en mantenimiento (debe marcarse como no disponible para su uso)
