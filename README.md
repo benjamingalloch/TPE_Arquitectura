@@ -19,6 +19,9 @@ misma.
 
     PUT http://localhost:8081/administracion/cuenta/{id}/suspender
 
+    Habilitar: 
+        PUT http://localhost:8081/administracion/cuenta/{id}/habilitar
+
 c. Como administrador quiero consultar los monopatines con más de X viajes en un cierto año.
 
     GET http://localhost:8081/administracion/monopatines/año/{year}/minimos-viajes/{minimTrips}
