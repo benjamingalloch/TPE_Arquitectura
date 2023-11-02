@@ -117,7 +117,7 @@ public class AdminService{
 
     @Transactional
     public ResponseEntity<?> deleteScooter(long scooterId) throws Exception {
-        String stationUrl = "http://localhost:8002/monopatines/eliminar/" + scooterId;
+        String stationUrl = "http://localhost:8002/monopatines/" + scooterId;
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
