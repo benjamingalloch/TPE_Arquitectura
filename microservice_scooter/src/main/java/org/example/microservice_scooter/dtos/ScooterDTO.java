@@ -16,7 +16,6 @@ public class ScooterDTO {
     private String status;
     private double kilometers;
     private int useTime;
-    private List<PauseDTO> pauses = new ArrayList<>();
 
 
     public ScooterDTO(Scooter scooter) {
@@ -26,7 +25,6 @@ public class ScooterDTO {
         this.status = scooter.getStatus();
         this.kilometers = scooter.getKilometers();
         this.useTime = scooter.getUseTime();
-        this.pauses.addAll(scooter.getPauses().stream().map(PauseDTO::new).toList());
     }
 
     public ScooterDTO(double latitude,
