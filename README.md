@@ -67,6 +67,9 @@ un monopatín cerca de mi ubicación
 • Agregar monopatín 
     POST http://localhost:8081/administracion/monopatines
 
+• Obtener todos los monopatines
+    GET http://localhost:8081/administracion/monopatines
+
 • Quitar monopatín
     DELETE http://localhost:8081/administracion/monopatines/{id}
 
