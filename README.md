@@ -17,7 +17,7 @@ configurarse para incluir (o no) los tiempos de pausa.
 b. Como administrador quiero poder anular cuentas para inhabilitar el uso momentáneo de la
 misma.
 
-    PUT http://localhost:8081/cuenta/{id}/suspender
+    PUT http://localhost:8081/administracion/cuenta/{id}/suspender
 
 c. Como administrador quiero consultar los monopatines con más de X viajes en un cierto año.
 
