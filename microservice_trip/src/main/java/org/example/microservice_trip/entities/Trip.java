@@ -2,6 +2,7 @@ package org.example.microservice_trip.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.example.microservice_trip.dtos.TripDTO;
 
 import java.sql.Timestamp;
 
@@ -26,9 +27,6 @@ public class Trip {
     @Column(name = "end_time")
     private Timestamp endTime;
 
-    @Column(name = "use_time")
-    private int useTime;
-
     @Column(name = "kilometers")
     private double kilometers;
 
@@ -42,14 +40,23 @@ public class Trip {
         super();
     }
 
-    public Trip(long userId, long scooterId, Timestamp startTime, Timestamp endTime, int pauseTime, Double price, int useTime, double kilometers) {
+    public Trip(long userId, long scooterId, Timestamp startTime, Timestamp endTime, int pauseTime, Double price, double kilometers) {
         this.userId = userId;
         this.scooterId = scooterId;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.useTime = useTime;
         this.kilometers = kilometers;
         this.pauseTime = pauseTime;
         this.price = price;
+    }
+
+    public void updateFromDTO(TripDTO tripDTO) {
+        this.userId = tripDTO.getUserId();
+        this.scooterId = tripDTO.getScooterId();
+        this.startTime = tripDTO.getStartTime();
+        this.endTime = tripDTO.getEndTime();
+        this.kilometers = tripDTO.getKilometers();
+        this.pauseTime = tripDTO.getPauseTime();
+        this.price = tripDTO.getPrice();
     }
 }

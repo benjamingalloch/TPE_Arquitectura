@@ -1,7 +1,9 @@
 package org.example.microservice_trip.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
+import org.example.microservice_trip.dtos.RateDTO;
 import org.example.microservice_trip.dtos.TripDTO;
+import org.example.microservice_trip.entities.Rate;
 import org.example.microservice_trip.services.TripService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +18,7 @@ public class TripController {
     private TripService tripService;
 
     @GetMapping("")
-    public ResponseEntity<?> getAll(){
+    public ResponseEntity<?> getAll() {
         try{
             return ResponseEntity.status(HttpStatus.OK).body(tripService.findAll());
         }catch (Exception e){
@@ -33,8 +35,19 @@ public class TripController {
         }
     }
 
+    @Operation(description = "Actualiza los datos de un viaje por su id")
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable long id, @RequestBody TripDTO tripDTO) {
+        try{
+            tripService.update(id, tripDTO);
+            return ResponseEntity.status(HttpStatus.OK).body("Se actualizaron correctamente los datos del viaje con id: " + id);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudieron actualizar los datos del viaje. " + e.getMessage());
+        }
+    }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable long id){
+    public ResponseEntity<?> delete(@PathVariable long id) {
         try{
             tripService.delete(id);
             return ResponseEntity.status(HttpStatus.OK).body("Se elimino correctamente el viaje con travelId: " + id);
@@ -53,27 +66,25 @@ public class TripController {
         }
     }
 
-
-    @Operation(description = "Actualiza los datos de un viaje por su id")
-    @PutMapping("/actualizar/{id}")
-    public ResponseEntity<?> update(@PathVariable long id, @RequestBody TripDTO tripDTO){
+    @Operation(description = "Finaliza un viaje por su id, y actualiza los kilometros")
+    @PutMapping("/finalizar/{id}/km/{kilometers}")
+    public ResponseEntity<?> endTrip(@PathVariable long id, @PathVariable double kilometers) {
         try{
-            tripService.update(id, tripDTO);
-            return ResponseEntity.status(HttpStatus.OK).body("Se actualizaron correctamente los datos del viaje con id: " + id);
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudieron actualizar los datos del viaje. " + e.getMessage());
-        }
-    }
-
-    @Operation(description = "Finaliza un viaje por su id")
-    @PutMapping("/finalizar/{id}")
-    public ResponseEntity<?> endTrip(@PathVariable long id){
-        try{
-            tripService.tripEnd(id);
-            return ResponseEntity.status(HttpStatus.OK).body("Se finalizo correctamente el viaje con travelId: " + id);
+            tripService.endTrip(id, kilometers);
+            return ResponseEntity.status(HttpStatus.OK).body("Se finalizo correctamente el viaje con id: " + id);
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo finalizar el viaje. " + e.getMessage());
         }
     }
 
+    @Operation(description = "Agregar tarifas para una fecha en adelante")
+    @PostMapping("/agregar-tarifas-desde")
+    public ResponseEntity<?> addNewRate(@RequestBody RateDTO rateDTO) {
+        try{
+            tripService.addRatesForDate(rateDTO);
+            return ResponseEntity.status(HttpStatus.OK).body("Tarifas agregadas correctamente. Se cobraran las nuevas tarifas a partir de la fecha " + rateDTO.getDate() );
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudieron agregar las tarifas. " + e.getMessage());
+        }
+    }
 }

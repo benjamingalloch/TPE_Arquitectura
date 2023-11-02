@@ -78,13 +78,13 @@ public class ScooterService{
     @Transactional
     public void delete(Long id) {
         scooterRepository.delete(scooterRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("ID de monopatin invalido: " + id)));
+                () -> new IllegalArgumentException("El ID de monopatin: " + id + " es invalido")));
     }
 
     @Transactional
     public void update(Long id, ScooterDTO scooterDTO) {
         Scooter scooter = scooterRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("ID de monopatin invalido: " + id));
+                () -> new IllegalArgumentException("El ID de monopatin: " + id + " es invalido"));
         scooter.updateFromDTO(scooterDTO);
         scooterRepository.save(scooter);
     }
@@ -122,7 +122,7 @@ public class ScooterService{
     @Transactional
     public void endPause(long scooterId, long tripId, long userId) {
         Scooter scooter = scooterRepository.findById(scooterId).orElseThrow(
-                () -> new IllegalArgumentException("El ID de monopatin " + scooterId + " es invalido"));
+                () -> new IllegalArgumentException("El ID de monopatin: " + scooterId + " es invalido"));
         Pause activePause = scooter.getPause(tripId, userId);
         if (activePause != null) {
             activePause.endPause();
@@ -133,7 +133,7 @@ public class ScooterService{
     @Transactional
     public void enableScooter(long id) {
         Scooter scooter = scooterRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("ID de scooter invalido: " + id));
+                () -> new IllegalArgumentException("El ID de monopatin: " + id + " es invalido"));
         scooter.setStatus("FREE");
         scooterRepository.save(scooter);
     }
@@ -141,7 +141,7 @@ public class ScooterService{
     @Transactional
     public void disableScooter(long id) {
         Scooter scooter = scooterRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("ID de scooter invalido: " + id));
+                () -> new IllegalArgumentException("El ID de monopatin: " + id + " es invalido"));
         scooter.setStatus("OUT OF SERVICE");
         scooterRepository.save(scooter);
     }

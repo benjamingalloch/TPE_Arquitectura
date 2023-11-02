@@ -2,8 +2,10 @@ package org.example.microservice_trip.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.example.microservice_trip.dtos.RateDTO;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -11,30 +13,28 @@ import java.util.Date;
 @Table(name = "rate")
 public class Rate {
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
     @Column(name = "date")
-    private Timestamp date;
+    private LocalDate date;
 
-    @Column(name = "flatRate")
-    private double flatRate;
+    @Column(name = "normal_rate")
+    private double normalRate;
 
-    @Column(name = "fullRate")
-    private double fullRate;
+    @Column(name = "pause_rate")
+    private double pauseRate;
 
     public Rate() {
         super();
     }
 
-    public Rate(double flatRate, double fullRate) {
-        this(flatRate, fullRate,  new Timestamp(System.currentTimeMillis()));
+    public Rate(RateDTO rateDTO){
+        this.normalRate = rateDTO.getNormalRate();
+        this.pauseRate = rateDTO.getPauseRate();
+        this.date = rateDTO.getDate();
     }
 
-    public Rate(double flatRate, double fullRate, Timestamp date) {
-        this.flatRate = flatRate;
-        this.fullRate = fullRate;
+    public Rate(double normalRate, double pauseRate, LocalDate date) {
+        this.normalRate = normalRate;
+        this.pauseRate = pauseRate;
         this.date = date;
     }
 }

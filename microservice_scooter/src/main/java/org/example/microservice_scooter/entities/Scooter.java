@@ -34,9 +34,6 @@ public class Scooter {
     @Column(name = "use_time")
     private int useTime;
 
-    @Column(name = "pause_time")
-    private int pauseTime;
-
     @OneToMany(mappedBy = "scooter")
     private List<Pause> pauses;
 

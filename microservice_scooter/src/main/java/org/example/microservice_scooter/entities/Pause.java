@@ -28,9 +28,7 @@ public class Pause {
 
     @Column(name = "time")
     private int time;
-
-
-
+  
     @ManyToOne
     @JoinColumn(name = "scooter_id")
     private Scooter scooter;
