@@ -3,6 +3,7 @@ package org.example.microservice_admin.controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import org.example.microservice_admin.DTOs.DateFromUntilDTO;
 import org.example.microservice_admin.DTOs.NewScooterDTO;
+import org.example.microservice_admin.DTOs.RateDTO;
 import org.example.microservice_admin.DTOs.StationDTO;
 import org.example.microservice_admin.Services.AdminService;
 import org.example.microservice_admin.Services.BillService;
@@ -65,6 +66,17 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.OK).body(adminService.countScootersByStatus(status));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error " + e.getMessage());
+        }
+    }
+
+    //------------------------------------------------------------ PUNTO 3 F ------------------------------------------------------------
+    @Operation(description = "Agregar tarifas para una fecha en adelante")
+    @PostMapping("/agregar-tarifas-desde")
+    public ResponseEntity<?> addNewRate(@RequestBody RateDTO rateDTO) {
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body(adminService.addNewRate(rateDTO));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error. " + e.getMessage());
         }
     }
 

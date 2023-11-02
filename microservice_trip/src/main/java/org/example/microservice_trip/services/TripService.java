@@ -12,15 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service("tripService")
 public class TripService{
@@ -209,5 +204,10 @@ public class TripService{
         }
         Rate rate = new Rate(rateDTO);
         return new RateDTO(this.rateRepository.save(rate));
+    }
+
+    @Transactional(readOnly = true)
+    public List<RateDTO> findAllRates() {
+        return this.rateRepository.findAll().stream().map(RateDTO::new ).toList();
     }
 }

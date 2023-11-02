@@ -1,5 +1,6 @@
 package org.example.microservice_admin.Services;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.example.microservice_admin.DTOs.*;
 import org.example.microservice_admin.Repositories.BillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,8 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
@@ -93,6 +96,22 @@ public class AdminService{
     public Long countScootersByStatus(String status) throws Exception {
         String scooterUrl = "http://localhost:8082/monopatines/cantidad/" + status;
         return restTemplate.getForObject(scooterUrl, Long.class);
+    }
+
+
+    //------------------------------------------------------------ PUNTO 3 F ------------------------------------------------------------
+    public ResponseEntity<?> addNewRate(RateDTO rateDTO) throws Exception {
+        String tripUrl = "http://localhost:8085/viajes/agregar-tarifas-desde";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<RateDTO> requestEntity = new HttpEntity<>(rateDTO, headers);
+
+        ResponseEntity<Void> response = restTemplate.exchange(tripUrl, HttpMethod.POST, requestEntity, Void.class);
+        if (response.getStatusCode() != HttpStatus.OK) {
+            throw new Exception("Error a REST");
+        }
+        return response;
     }
 
     //------------------------------------------------------------------------------------------------------------------------------

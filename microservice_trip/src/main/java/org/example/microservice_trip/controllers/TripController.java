@@ -87,4 +87,14 @@ public class TripController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudieron agregar las tarifas. " + e.getMessage());
         }
     }
+
+    @GetMapping("/historial-tarifas")
+    public ResponseEntity<?> getAllRates() {
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body(tripService.findAllRates());
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error al obtener tarifas. " + e.getMessage());
+        }
+    }
+
 }
